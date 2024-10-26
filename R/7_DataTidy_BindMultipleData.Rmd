@@ -1,0 +1,304 @@
+---
+title: "Class7"
+author: "Chen-Chia Ku"
+date: "2023-10-25"
+output:
+  pdf_document:
+    toc_depth: 5
+    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
+    latex_engine: xelatex # latex 引擎設定為 xelatex
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+header-includes:
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+# Last week
+
+Last week, we introduce some information  about **pipe %>%**, which can connect the function with one orignal dataset together. And also learn some information about **group_by** and **summarise()**. To aggregate the data for different variable.
+
+# Review
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr) # install.package("dplyr")
+
+```
+
+
+```{r message=FALSE, warning=FALSE}
+Taidt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Taichung2013_2023.csv")
+
+
+
+Taidt6 <- Taidt %>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  rename(precipitation="prec") %>%
+  mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  filter(Y<=2017) %>%
+  #mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  #mutate(station=as.character(station))
+  ## Or you can type...
+   mutate(YMD=paste(Y, M, D, sep="_"), 
+          station=as.character(station))
+  #rename(precipitation="prec")
+head(Taidt6)
+
+Taidt8 <- Taidt6 %>% 
+  group_by(station, Y, M) %>%
+  summarise(AveT=mean(tavg, na.rm=T), 
+            AveTsd=sd(tavg, na.rm=T),
+            Pre=sum(precipitation, na.rm=T)) %>%
+  ungroup()
+head(Taidt8, 10)
+
+Taidt9 <- Taidt8 %>%
+  group_by(station, Y) %>%
+  summarise(averageT=mean(AveT, na.rm=T),
+            maxT=max(AveT, na.rm = T),
+            Precip=sum(Pre, na.rm=T)) %>%
+  ungroup()
+Taidt9
+
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+climate <- read.csv("D:/2_lab/Dt1_ClimateData/1950-202303全台局屬測站氣象資料(d).csv", fileEncoding = "big5") 
+
+st <-levels(as.factor(climate$station))
+
+for (i in 1:length(st)) {
+  stadt <- climate %>% 
+    filter(station==st[i], Y>=2013)
+  write.csv(stadt, paste("clidt_", st[i], ".csv", sep=""),row.names = F)
+}
+
+
+
+Chiadt <- climate %>% 
+  filter(station==467480, Y>=2013)
+
+Hendt <- climate %>%
+  filter(station==467590, Y>=2013)
+
+SunMoondt <- climate %>%
+  filter(station==467650, Y>=2013)
+
+write.csv(Chiadt, "Chiadt2013_2023.csv", row.names = F)
+write.csv(Hendt, "Hendt2013_2023.csv", row.names=F)
+write.csv(SunMoondt, "SunMoondt2013_2023.csv", row.names=F)
+
+```
+
+
+
+# Read other data set
+```{r message=FALSE, warning=FALSE}
+Chiadt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Chiayi2013_2023.csv")
+Hendt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Henchun2013_2023.csv")
+SunMoondt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/SunMoondt2013_2023.csv")
+```
+
+```{r message=FALSE, warning=FALSE}
+head(Chiadt)
+head(Hendt)
+head(SunMoondt)
+
+```
+
+# 4. Combine several dataset.
+
+## 4.1. bind_rows()
+
+**bind_rows()** can bind all of the data together into the next row by the same column names.
+
+```{r message=FALSE, warning=FALSE}
+TCHdt <- bind_rows(Taidt, Chiadt, Hendt, SunMoondt) 
+
+
+TCHdtx <- Taidt %>%
+  bind_rows(Chiadt, Hendt, SunMoondt)
+
+```
+
+So now, after binding the data together, we can compile those data and calculate the climate data under different climate station.
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+
+TCHdt1 <- bind_rows(Taidt, Chiadt, Hendt, SunMoondt) %>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  rename(precipitation="prec") %>%
+  mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  filter(Y<=2017) %>%
+  #mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  #mutate(station=as.character(station))
+  ## Or you can type...
+   mutate(YMD=paste(Y, M, D, sep="_"), 
+          station=as.character(station))
+head(TCHdt1)
+
+TCHdt_month <- TCHdt1 %>% 
+  group_by(station, Y, M) %>%
+  summarise(AveT=mean(tavg, na.rm=T), 
+            AveTsd=sd(tavg, na.rm=T),
+            Pre=sum(precipitation, na.rm=T)) %>%
+  ungroup()
+head(TCHdt_month, 10)
+
+TCHdt_year <- TCHdt_month %>% 
+  group_by(station, Y) %>%
+  summarise(averageT=mean(AveT, na.rm=T),
+            maxT=max(AveT, na.rm = T),
+            Precip=sum(Pre, na.rm=T)) %>%
+  ungroup()
+head(TCHdt_year, 10)
+
+boxplot(TCHdt_year$Precip~TCHdt_year$station)
+boxplot(Precip~station, data=TCHdt_year)
+```
+
+## 4.2. bind_cols()
+Number of rows for each data should be the same.
+```{r message=FALSE, warning=FALSE}
+stationName <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/StationName.csv", fileEncoding = "big5")
+
+head(stationName)
+
+CBind <- bind_cols(Taidt, Chiadt, Hendt, SunMoondt)
+head(CBind)
+
+```
+
+Try this code. Can you combine those data? And why?
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+CBind1 <- bind_cols(Taidt, Chiadt, Hendt, SunMoondt, stationName)
+```
+
+## 4.3. left_join()
+Mutating joins add columns from y to x, matching observations based on the keys.
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+TCHdt_year1 <- TCHdt_year %>%
+  left_join(stationName, by=c("station"="station"))
+
+```
+
+Change the data type of "station".
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+TCHdt_year1 <- TCHdt_year %>% 
+  mutate(station=as.numeric(station)) %>%
+  left_join(stationName, by=c("station"="station"))
+```
+
+Different function in **left_join()** to do the same result
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+TCHdt_year1 <- TCHdt_year %>% 
+  mutate(station=as.numeric(station)) %>%
+  left_join(stationName, by=join_by(station==station))
+
+TCHdt_year1 <- TCHdt_year %>% 
+  mutate(station=as.numeric(station)) %>%
+  left_join(stationName, by=join_by(station))
+```
+
+Try **right_join()** and **full_join()**
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+TCHdt_test1 <- TCHdt_year %>% 
+  mutate(station=as.numeric(station)) %>%
+  right_join(stationName, by=c("station"="station"))
+
+TCHdt_test2 <- TCHdt_year %>% 
+  mutate(station=as.numeric(station)) %>%
+  full_join(stationName, by=c("station"="station"))
+
+```
+
+Plot the data for each station name
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+
+boxplot(Precip~stationName, data=TCHdt_year1)
+
+```
+
+# Do some statistic
+Compare whether there are any difference in precipitation among different station?
+
+```{r}
+ANO <- aov(Precip~stationName, data=TCHdt_year1)
+summary(ANO)
+```
+
+# Excercise
+Combine climate data from multiple climate stations, then use the **boxplot()** function to plot the average temperature, precipitation, maximum temperature, and minimum temperature. Afterward, test whether there are any significant differences in each variable at different elevations.
+
+Please submit write the code and save it into .rmd file. And email one .rmd file to my email: [*jjakon11\@gmail.com*](mailto:jjakon11@gmail.com){.email}
+
+Chen-Chia Ku
+
+```{r}
+Excerdt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Excercise.csv")
+stationName <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class8/StationName.csv", fileEncoding = "big5")
+
+
+Excerdt1 <- Excerdt%>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  rename(precipitation="prec") %>%
+  mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  filter(Y<=2017) %>%
+  mutate(YMD=paste(Y, M, D, sep="_"), 
+        station=as.character(station)) %>%
+  
+  #Monthly data
+  group_by(station, Y, M) %>%
+  summarise(AveT=mean(tavg, na.rm=T), 
+            AveTsd=sd(tavg, na.rm=T),
+            Pre=sum(precipitation, na.rm=T)) %>%
+  ungroup() %>% 
+  
+  #Annual data
+  group_by(station, Y) %>%
+  summarise(averageT=mean(AveT, na.rm=T),
+            maxT=max(AveT, na.rm = T),
+            Precip=sum(Pre, na.rm=T)) %>%
+  ungroup() %>%
+  
+  #left join the station name into the data
+  mutate(station=as.numeric(station)) %>%
+  left_join(stationName, by=c("station"="station"))
+
+Excerdt2 <- Excerdt1 %>%
+  gather("Variable", "value", averageT:Precip ) %>%
+  arrange(station, Variable, Y) %>%
+  group_by(Variable, station) %>%
+  mutate(Diff=value-lag(value)) %>%
+  ungroup()  
+
+
+Excerdt3 <- Excerdt2 %>%
+  gather("Variable2", "value2", value:Diff) %>%
+  mutate(Variable3=paste(Variable, Variable2,sep="_" )) %>%
+  dplyr::select(-Variable, -Variable2) %>%
+  spread(Variable3, value2)
+
+```
+
+
+
+

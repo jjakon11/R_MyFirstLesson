@@ -1,0 +1,235 @@
+---
+title: "Class6"
+author: "Chen-Chia Ku"
+date: "2023-10-18"
+output:
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  pdf_document:
+    toc_depth: 5
+    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
+    latex_engine: xelatex # latex 引擎設定為 xelatex
+header-includes:
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+# Class Instruction:
+
+[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+
+# Tidy your data.
+
+In the following section, I will introduce some information about how to tidy your own data by R programming. Here, I will use **dplyr** package to tidy the data.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr) # install.package("dplyr")
+
+```
+
+# 1. Input the Data
+
+```{r message=FALSE, warning=FALSE}
+
+Taidt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class6/Taichung2013_2023.csv")
+
+head(Taidt)
+```
+
+# 2. Basic tidy data function
+
+## 2.1 select()
+
+Use **select()** to select the column.
+
+```{r echo=T, list(width.cutoff=80), tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+Taidt1  <- select(Taidt, station, Y, M, D, tavg, tmax, tmin, prec)
+head(Taidt1)
+
+Taidt1.1 <- select(Taidt, -X, -YMD, -AvgWS,-AvgWD)
+
+```
+
+## 2.2. filter()
+
+Use **filter()** to filter the variable in the specific column.
+
+```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+Taidt2 <- filter(Taidt1, Y<=2017) 
+head(Taidt2)
+table(Taidt2$Y)
+table(Taidt2$Y, Taidt2$M)
+```
+
+## 2.3. mutate()
+
+Use **mutate()** to add one column.
+
+```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+Taidt3 <- mutate(Taidt2, YMD=paste(Y, M, D, sep="_"))
+Taidt3.1 <- mutate(Taidt2, xx=1); head(Taidt3.1)
+head(Taidt3)
+str(Taidt3)
+
+Taidt3.2 <- mutate(Taidt2, cal=Y*M*D)
+head(Taidt3.2)
+
+Taidt4 <- mutate(Taidt3, station=as.character(station))
+str(Taidt4)
+```
+
+## 2.4. rename()
+
+Use **rename()** to rename the column name.
+
+```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+Taidt5 <- rename(Taidt4, precipitation="prec")
+head(Taidt5)
+```
+
+If we combine all of the code together, we will found out that the their are so many name of the data.
+
+```{r message=FALSE, warning=FALSE}
+Taidt1 <- select(Taidt, station, Y, M, D, tavg, tmax, tmin, prec)
+Taidt5 <- rename(Taidt1, precipitation="prec")
+Taidt2 <- filter(Taidt1, Y<=2017) 
+Taidt3 <- mutate(Taidt2, YMD=paste(Y, M, D, sep="_"))
+Taidt4 <- mutate(Taidt3, station=as.character(station))
+
+
+```
+
+## 2.5 pipe %\>%
+
+R pipes are a way to chain multiple operations together in a concise and expressive way. They are represented by the **%\>%** operator, which takes the output of the expression on its left and passes it as the first argument to the function on its right
+
+**This is your data** %\>% **select( )** %\>% **filter( )** %\>% **Result**
+
+![](pipes_image0.png){width="442"}
+
+```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+Taidt6 <- Taidt %>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  rename(precipitation="prec") %>%
+  mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  filter(Y<=2017) %>%
+  #mutate(YMD=paste(Y, M, D, sep="_")) %>%
+  #mutate(station=as.character(station))
+  ## Or you can type...
+   mutate(YMD=paste(Y, M, D, sep="_"), 
+          station=as.character(station), 
+          x=D*78, 
+          xx=x^0.5)
+  #rename(precipitation="prec")
+head(Taidt6)
+
+```
+
+### Do some simple plot
+
+```{r out.width="80%"}
+plot(Taidt6$tavg, Taidt6$precipitation)
+hist(Taidt6$tavg)
+boxplot(Taidt6$tavg~Taidt6$M)
+```
+
+# 3. Groupping data function
+
+## 3.1. summarise()
+
+using **summarise()** could calculate the value in high efficiency under **pipe** and **dplyr package**.
+
+```{r message=FALSE, warning=FALSE}
+Taidt7 <- Taidt6 %>%
+  summarise(AveT=mean(tavg, na.rm=T), 
+            AveTsd=sd(tavg, na.rm=T),
+            Ave95=quantile(tavg, 0.95),
+            Pre=sum(precipitation, na.rm=T))
+
+head(Taidt7)
+```
+
+## 3.2. group_by()
+
+By using **group_by**, you can aggregate the categories of your own variable and using **summarise()** to calculate the value of each variable.
+
+Notice that **ungroup()** is always used after the **group()** command after performing calculations. If you forget to **ungroup()** data, future data management will likely produce errors. Always **ungroup()** when you've finished with your calculations.
+
+```{r message=FALSE, warning=FALSE}
+Taidt8 <- Taidt6 %>% 
+  group_by(station, Y, M) %>%
+  summarise(AveT=mean(tavg, na.rm=T), 
+            AveTsd=sd(tavg, na.rm=T),
+            Pre=sum(precipitation, na.rm=T)) %>%
+  ungroup()
+head(Taidt8, 10)
+
+Taidt9 <- Taidt8 %>%
+  group_by(station, Y) %>%
+  summarise(averageT=mean(AveT, na.rm=T),
+            maxT=max(AveT, na.rm = T),
+            Precip=sum(Pre, na.rm=T)) %>%
+  ungroup()
+Taidt9
+
+```
+
+### Extra work of group_by()
+
+```{r}
+Taidt10 <- Taidt8 %>%
+  group_by(station, Y) %>%
+  mutate(AnualT=mean(AveT, na.rm=T), 
+         AnualP=sum(Pre, na.rm=T)) %>%
+  ungroup()
+
+head(Taidt10, 10)
+```
+
+# Excercise
+
+The following exercise is going to prepare for your next week data. Please use pipe to connect all your data.
+
+1.  Input the data of **Taichung2013_2023.csv**.
+
+2.  Please select "station", "Y", "M", "D", "tavg", "tmax", "tmin", and "prec" in Taichung 2013-2023 climate data.
+
+3.  Please filter 2013-2017 data and **out put** to .csv file.
+
+4.  Please filter 2017-2023 data and **out put** to .csv file.
+
+Please email one rmd file to my email: [*jjakon11\@gmail.com*](mailto:jjakon11@gmail.com){.email}
+
+Chen-Chia Ku
+
+```{r eval=FALSE, include=FALSE}
+Taidt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class5/Taichung2013_2023.csv")
+
+HTaidt1 <- Taidt %>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  filter(Y<2017)
+
+HTaidt2 <- Taidt %>%
+  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
+  filter(Y>2017)
+
+write.csv(HTaidt1, "Taichung2013-2017.csv", row.names = F)
+write.csv(HTaidt2, "Taichung2017-2023.csv", row.names = F)
+```

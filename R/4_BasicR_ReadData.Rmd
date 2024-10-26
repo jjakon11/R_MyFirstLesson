@@ -1,0 +1,223 @@
+---
+title: "Class4"
+author: "Chen-Chia Ku"
+date: "2023-09-20"
+output:
+  pdf_document:
+    toc_depth: 5
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+    code-fold: true
+header-includes:
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+# Class Instruction:
+
+[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+
+# Last week
+
+Last week, we introduce some basic information about vector and matrix. We now can build a vector and matrix with some climate information. And this week, we are going to transform the matrix into data frame type.
+
+# Today's goal: input your own data.
+
+## 4.4 Matrix
+
+```{r message=FALSE, warning=FALSE, echo = T}
+temperature <- c(28, 29, 27,27,30)
+rains <- c(0, 5, 6, 0, 2)
+Winds <- c(30, 25, 22, 24, 18)
+
+climate <- matrix(c(temperature, rains, Winds), byrow=TRUE, nrow=3)
+rownames(climate) <- c("Temperature", "Rains", "Winds")
+colnames(climate)<-c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+climate
+
+class(climate)
+```
+
+## 4.5. Data frame
+
+### 4.5.1 Create the Data
+
+```{r message=FALSE, warning=FALSE, echo = T}
+climatedt <- data.frame(climate)
+class(climatedt)
+climatedt
+```
+
+Create the another dataframe by vector
+
+```{r message=FALSE, warning=FALSE, echo = T}
+x <- 10:1
+y <- -4:5
+sp <- c("A", "B","C","D", "E", 
+        "F", "G", "H", "I", "J")
+abundance <- c(sample(50:1000, 10, replace=F))
+
+DF <- data.frame(x, y, sp, abundance)
+class(DF)
+
+str(DF)
+
+View(DF)
+
+head(DF)
+
+head(DF, 3)
+nrow(DF)
+ncol(DF)
+dim(DF)
+
+colnames(DF)
+colnames(DF)[3]
+
+rownames(DF)
+
+DF$sp
+
+class(DF$sp)
+
+DF$sp <- factor(DF$sp)
+class(DF$sp)
+
+str(DF)
+```
+
+The difference between data frame and matrix is that matrix can only contain a single class of data, while data frames can consist of many different class of data.
+
+### 4.5.2 Get the example data from package
+
+```{r message=FALSE, warning=FALSE, echo = T}
+data(iris)
+iris
+View(iris)
+
+str(iris)
+
+head(iris)
+
+str(iris)
+```
+
+### 4.5.3 Input data from your own data
+
+Before input your data input, we need to setup working directory before we input or out put somethings.
+
+```{r message=FALSE, warning=FALSE, echo = T}
+# Check your own working directory
+getwd()
+
+# Set up your own working directory
+setwd("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4")
+
+setwd("D:\\Drive\\2_lab\\Edu5_Course\\Rbasic\\Course_Rbasic")
+
+setwd("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic")
+```
+
+### read csv file
+
+```{r message=FALSE, warning=FALSE, echo = T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+
+mydt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/example.csv")
+mydt2 <- read.csv(file.choose()) #example.csv
+
+#mydt <- read.csv(paste(getwd(), "/example.csv", sep=""))
+```
+
+### export the csv file
+
+```{r}
+write.csv(climatedt, "climatedt.csv",  row.names = T)
+```
+
+*Excercise* --\> Read a file
+
+```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+Excercise1 <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.csv", fileEncoding = "utf8")
+
+#Any problem?
+
+Excercise <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.csv", fileEncoding = "big5")
+
+```
+
+### read txt file
+
+```{r message=FALSE, warning=FALSE, echo = T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+mydt3 <- read.table("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.txt", fileEncoding = "big5", header=T)
+
+```
+
+### read Excel file
+
+```{r echo=T, message=FALSE, warning=FALSE, list(width.cutoff=50), tidy=TRUE, tidy.opts=list(width.cutoff=50)}
+library(readxl) #install.packages("readxl")
+
+mydt4 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet=1)
+
+mydt5 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet=2)
+
+mydt5 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet="spcode")
+
+```
+
+### a comprise Data in R
+
+```{r message=FALSE, warning=FALSE, echo = T}
+save(mydt4, mydt5, iris, file="myiris.rdata")
+rm(mydt4, mydt5, iris)
+
+#mydt4 
+#mydt5
+#DF
+
+load("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/myiris.rdata")
+
+```
+
+## 5. Lists
+
+Lists can be conceived as vectors made of elements which can be of different lengths, sizes, type, etc. It can contain a numerous type of data, including vectors, matrix and data frames. You can imagine that List is a room of data, and that contain a numerous type of data in different layer.
+
+```{r message=FALSE, warning=FALSE, echo = T}
+list(1,2,3)
+list(c(1,2,3))
+
+list1 <- list(c(1,2,3), 3:7)
+list2 <- list(iris, mydt3, temperature)
+```
+
+Finally, we finish all of the basic information of R.
+
+## Input your data Now
+
+Please input your own data and see what will happens.
+
+# Excercise
+
+1.  Please create a 4 x 7 matrix with temperature, precipitation, wind speed and wind direction as the row name and Monday to Sunday as the column name. Then, transfer the matrix into data frame.
+
+2.  Please output the data frame that created by the first question.
+
+jjakon11\@gmail.com
