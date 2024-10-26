@@ -32,6 +32,10 @@ The Course schedule are as following:
 
 This version of the course content is still a work in progress. The .rmd file reflects the real course experience, though occasionally students need more time for practice, and classes may fall slightly behind the original schedule.
 
+## After 14 hour, You will be a Pro Man
+
+<img src="E:/Drive/2_lab/Edu5_Course/R_MyFisrtLesson/Output/JADE2.png" width="400"/>
+
 ## Reference
 
 1. [R for Data Science 2nd edition (2017)](https://r4ds.had.co.nz/)
