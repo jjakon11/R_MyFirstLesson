@@ -5,7 +5,7 @@
 **"RRRRRRRRRRR~~~ !!@^@!! ~~RRRRRRRR"** 
 
 ***
-## Introduction
+## For a Newbie, You Can Start Here:
 
 This course is a one-hour lab session at National Chung-Hsing University. Since it’s a short, one-hour class, the focus is on basic knowledge of R, data compiling, and data visualization. The datasets used are primarily open data, and most of the students have a background in ecology. Therefore, this lab course will demonstrate climate, spatial, and tree data in an accessible and engaging way.
 
@@ -40,9 +40,12 @@ This version of the course content is still a work in progress. The .rmd file re
 
 ***
 
-Contact: 
+Contact information: 
+
 **Chen-Chia Ku **
+
 jjakon11@gmail.com
+
 [www.chenchiaku.com](https://www.chenchiaku.com/)
 
 
