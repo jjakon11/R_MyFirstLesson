@@ -1,0 +1,312 @@
+---
+title: "Class 2"
+author: "Chen-Chia Ku"
+date: "2023-09-20"
+output:
+  pdf_document:
+    toc_depth: 5
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+header-includes:
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- "\\setlist[itemize,2]{label=--}"
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+# Last week
+
+-   Last week, we introduce some information about R and R studio
+
+-   Basic frame work of R
+
+    -   Package
+    -   Function
+    -   Argument
+
+-   Basic data calculation
+
+# Today's goal:  **Create a temperature vector** 
+
+-   Basic data types
+
+    -   Numeric
+
+    -   Character
+
+    -   Logical
+
+-   Data structures
+
+    -   **Vector**
+
+    -   *Matrix*
+
+    -   *Factors*
+
+    -   *Data Frames*
+
+    -   *Lists*
+
+# 4. Data strucutres
+
+## 4.1. Variables and Basic Arithmetic
+
+-   Use R as a normal calculator
+
+```{r message=FALSE, warning=FALSE, echo = T, results = 'hide'}
+3
+3+4
+3-5
+2*6
+5/3
+15%%2
+15%/%2
+```
+
+-   Define variables
+
+```{r message=FALSE, warning=FALSE, echo = T}
+x <- 4
+x
+
+y <- 5
+
+z <- x+y
+z
+```
+
+## 4.2. Basic data types
+
+We can use class() to check what kind of variable is being used. **class()** is a  function that can used to understand the encoding properties.
+
+### 4.2.1. Numeric
+
+```{r message=FALSE, warning=FALSE}
+number <- 4.3
+class(number)
+
+integer <- 10
+class(integer)
+
+```
+
+```{r message=FALSE, warning=FALSE, echo = T}
+2.73e4 # 2.73*10^4
+1/2.73e4 #-> 3.663004e-05 -> 3.663004 * 10^-5
+
+```
+
+### 4.2.2. Character
+
+To introduce characters, we need to use quotation marks.
+
+```{r message=FALSE, warning=FALSE}
+world <-"Hello World"
+class(world)
+
+```
+
+### 4.2.3. Logical
+
+Logical class encodes Boolean values-\> TRUE and FALSE
+
+```{r message=FALSE, warning=FALSE}
+yes.no <- TRUE
+class(yes.no)
+is.logical(yes.no)
+is.numeric(number) # ask whether "number" is numeric or not
+is.character(world) # ask whether "world" is character or not
+is.numeric(world) # ask whether "world" is numeric or not
+```
+
+### 4.2.4. Special data type: NULL and NA
+
+-   **Null** means an empty object: contain no information
+
+-   **NA** means a non-available entry and representing a missing value in data analysis: contain information.
+
+## 4.3. Vectors
+
+A vector is an array of elements.We can create vectors in R with the command **c()** and the elements inside separated by commas
+
+**c()** is a generic function which can combines several arguments to form a vector or list. There are no dimension in **c()**.
+
+```{r message=FALSE, warning=FALSE}
+#Numeric
+VN <- c(1,2,3,4)
+VN
+length(VN)
+```
+
+```{r message=FALSE, warning=FALSE, echo = T}
+#Character
+VC <- c("Monday", "Tuesday", "Wednesday")
+VC
+
+#Logical
+VL <- c(TRUE, FALSE)
+VL
+
+```
+
+The command c() comes from combination, and it is used to combine elements that must be of homogeneous class.
+
+-   If the data type is not the same...
+
+    -   The information will coerced into the same class
+
+    -   The hierarchy will be: Character \> Numeric \> Logical
+
+```{r message=FALSE, warning=FALSE}
+Example1 <- c(3.4, "Goodjob")
+class(Example1)
+
+Example2 <- c(TRUE, 3.4)
+class(Example2)
+
+Example3 <- c(NA, 3, 4)
+length(Example3)
+class(Example3)
+```
+
+### More information of numeric vectors
+
+#### 4.3.1. Produce a consecutive numbers
+
+```{r message=FALSE, warning=FALSE, echo = T}
+c(0,1,2,3,4,5,6,7,8,9,10)
+0:10
+
+0:100
+c(0:100)
+
+```
+
+We can use **seq()** to produce a continuous or regular sequence.
+```{r}
+seq(0,100, by=1)
+seq(0,100, by=25)
+```
+
+
+If we are going to repeat a sequence of number or a group of number, **rep()** can generate a replicates value.
+
+```{r}
+
+
+rep(c(3, 2,1), time=10)
+rep(c("Happy", "Angry", "Sad"), time=5)
+rep(c(TRUE, FALSE), time=3)
+
+rep(c(3,2,1), each=10)
+rep(c(3,2,1), time=c(2,1,3))
+
+rep(seq(0,1000, by=25), each=10)
+
+```
+
+#### 4.3.2. Label the names to the numeric vector
+
+**names()** is a function to check or get the name of each object
+
+```{r message=FALSE, warning=FALSE, echo = T}
+temperature <- c(28, 29, 27,27,30)
+temperature
+#names(temperature)
+names(temperature) <-c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+temperature
+
+temperature+273.15
+temperature*1.8+32
+
+
+rains <- c(0, 5, 6, 0, 2)
+names(rains) <-c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+rains
+
+
+
+total.rains <- sum(rains)
+```
+
+If you are going to select the element in vector -\> use "brackets" **[ ]** - Bracket are used for indexing into a vector, matrix, array, list and data frame. - Also called *extraction operators*, extract specific elements from a vector or matrix
+
+```{r message=FALSE, warning=FALSE, echo = T}
+
+rains[2]
+
+rains[c(1,2)]
+
+temperature[c(2,3,4)]
+temperature[2:4]
+temperature["Wednesday"]
+
+```
+
+#### 4.3.3. Logical vector
+
+```{r message=FALSE, warning=FALSE, echo = T}
+rains>0
+temperature>=29
+
+# any(),  checking whether the condition is satisfied by, at least, one element of the vector.
+any(temperature>=29)
+
+# all(), checking whether the conditions are statisfied by all elements of the vector.
+all(temperature>=29)
+
+
+# to select day whether the temperature is larger than 29 degree in rain vector
+rains[temperature>=29]
+
+
+
+
+```
+
+#### 4.3.4. Order and sort the vector
+
+```{r message=FALSE, warning=FALSE, echo = T}
+order(temperature)
+
+temperature[order(temperature)]
+
+# calculation
+sum(temperature)
+mean(temperature)
+sd(temperature)
+max(temperature)
+min(temperature)
+range(temperature)
+quantile(temperature)
+quantile(temperature, 0.05)
+```
+
+# Excercise
+
+-   Please build two separate vectors for temperature and precipitation, each labeled with the name of the day of the week (Sunday to Saturday, 9/10-9/16).
+
+    -   *Ensure that the data is referenced from the Taichung weather station*
+    -   *Please refer to the data last week*
+
+    1.  What were the average, maximum, and minimum temperatures in Taichung last week?
+
+    2.  What was the total precipitation in Taichung last week?
+
+    3.  How many days did precipitation exceed 30mm in a day?
