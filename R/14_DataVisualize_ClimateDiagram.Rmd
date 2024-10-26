@@ -1,0 +1,160 @@
+---
+title: "Class14"
+author: "Chen-Chia Ku"
+date: "2023-12-13"
+output:
+  pdf_document:
+    toc_depth: 5
+    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
+    latex_engine: xelatex # latex 引擎設定為 xelatex
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+header-includes:
+- \usepackage{fontspec} # 使用 fontspec package
+- \usepackage{xeCJK}    # 使用 xeCJK package
+- \setCJKmainfont{標楷體}
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+always_allow_html: true
+---
+
+# Class Instruction:
+
+[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+
+
+# 1. Climate Diagram
+
+## 1.1. What is Climate Diagram
+
+The ecological climatic diagram uses simple graphics to illustrate variations in temperature, precipitation seasonality, and the duration and amplitude of dry and wet seasons.
+
+-   Through a standardized structure, it succinctly represents climate data.
+
+-   It can be used to understand the relationship between terrestrial vegetation distribution and climate.
+
+-   Development:
+
+    -   In the year 1957, Bagouls and Gaussen created diagrams using a 1:2 scale to depict monthly temperature and precipitation, enabling a quick understanding of the distribution of wet seasons.
+
+    -   In 1960, Walter and Lieth made adjustments to the ecological climatic diagram by:
+
+        -   Incorporating the duration of freezing periods.
+
+        -   Shortening the vertical axis for precipitation, no longer maintaining a constant 1:2 ratio.
+
+## **1.2. Ecological climatic diagrams in different region**
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(lattice)
+library(mapview)
+library(sp)
+library(dplyr)
+library(climatol)
+library(leafpop)
+dtw01 <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/World.csv", fileEncoding = "big5")
+dtw0 <- dtw01 %>%
+  arrange(variable, Country)
+dtw <- dtw0
+coun <- levels(as.factor(dtw0$Country))
+coun_num <-  length(coun)
+pp <- list()
+for ( i in 1: coun_num ){
+  dtw1 <- dtw0[dtw0$Country==coun[i],]
+  if (max(dtw1$Latitude) <0)
+    diagwl(dtw1[-1:-7],stname = coun[i],col=NULL,alt=mean(dtw1$Altitude),per=paste(dtw1$start,dtw1$end, sep="-"),mlab="en", shem=TRUE)
+  else
+    diagwl(dtw1[-1:-7],stname = coun[i],col=NULL,alt=mean(dtw1$Altitude),per=paste(dtw1$start,dtw1$end, sep="-"),mlab="en", shem=FALSE)
+  pp[[i]] <- recordPlot()
+} 
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+dtw2 <- as.data.frame(coun) %>%
+  left_join(dtw0[1:(nrow(dtw0)/4),], by=c("coun"="Country"))
+coordinates(dtw2) <- ~Longitude+Latitude
+proj4string(dtw2) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+mapview(dtw2, popup=popupGraph(pp))
+
+```
+
+## 1.3. Draw the Climate Diagram
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(climatol) #install.packages("climatol")
+```
+
+Look into the example data of climatol package
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data(climatol_data)
+head(datcli) #Check for the data in climatol_data
+diagwl(datcli,cols=NULL,stname="Example station",alt=100,per="1961-90",mlab="en")
+```
+
+## 1.3.1. Get the data from CWA website
+
+link( <https://www.cwa.gov.tw/V8/C/index.html> )
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Taichung1<- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/TaichungClimatdt.csv")
+head(Taichung1)
+diagwl(Taichung1[,-1],col=NULL,stname="Taichung",alt=84,per="1981-2010",mlab="en", shem=FALSE)
+```
+
+#### save the plot
+
+```{r}
+png(file="TaichungClimateDiagram.png",width =1600, height= 1800,res=300)
+diagwl(Taichung1[,-1],col=NULL,stname="Taichung",alt=84,per="1981-2010",mlab="en", shem=FALSE)
+dev.off()
+```
+
+## Exercise: Deal with the long data
+
+```{r echo=FALSE, message=FALSE, warning=FALSE , out.width="80%"}
+library(tidyr)
+
+TaichungLong<- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/Taichung2013_2023.csv")
+
+TaichungLong2 <- TaichungLong %>%
+  group_by(Y, M) %>%
+  summarise(Prec=sum(prec, na.rm = T), 
+            Tmax=mean(tmax, na.rm = T), 
+            Tmin=mean(tmin, na.rm = T), 
+            absMT=min(tmin, na.rm = T)) %>%
+  ungroup() %>%
+  group_by(M) %>%
+  summarise(A1precipitation=mean(Prec), 
+            A2Tepmax=mean(Tmax), 
+            A3Tepmin=mean(Tmin), 
+            A4AbsT=min(absMT)) %>%
+  ungroup() %>%
+  gather(Variable, value, A1precipitation:A4AbsT) %>%
+  spread(M, value) %>%
+  mutate(Variable=factor(Variable, levels=c("A1precipitation", "A2Tepmax", "A3Tepmin", "A4AbsT" )))
+colnames(TaichungLong2) <- c("Variable", "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+diagwl(TaichungLong2[,-1] ,col=NULL,stname = "TaichungLong2 ",alt=84,per="2013-2023",mlab="en", shem=FALSE)
+
+```

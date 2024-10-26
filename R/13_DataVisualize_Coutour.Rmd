@@ -1,0 +1,280 @@
+---
+title: "Class13"
+author: "Chen-Chia Ku"
+date: "2023-12-6"
+output:
+  pdf_document:
+    toc_depth: 5
+    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
+    latex_engine: xelatex # latex 引擎設定為 xelatex
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+header-includes:
+- \usepackage{fontspec} # 使用 fontspec package
+- \usepackage{xeCJK}    # 使用 xeCJK package
+- \setCJKmainfont{標楷體}
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+```{r include=FALSE}
+library(showtext)
+showtext_auto()
+
+```
+
+# Class Instruction:
+
+[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+library(sf)
+library(ggpubr)
+library(ggspatial) #annotation_north_arrow
+
+```
+
+# Last Week...
+
+# 3. Use ggplot to plot the geographic figure
+
+## 3.1. Using shapefile to plot the map
+
+### 3.1.1. Data input
+
+```{r message=FALSE, warning=FALSE}
+Climatedt <- read.csv(
+  "D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class12/TaiwanClimateStationAll_202003.csv",
+  fileEncoding = "Big5")
+
+taiwan_shp <-sf::st_read(dsn ="D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class12/Taiwan",
+                         layer="gadm36_TWN_2")
+
+#head(Climatedt)
+```
+
+```{r message=FALSE, warning=FALSE}
+Climatedt1 <- Climatedt %>%
+  mutate(Auto=factor(Auto, levels=c(1,0)))
+
+
+#Break the county line.
+
+taiwan2_shp <- st_union(taiwan_shp)
+```
+
+### 3.1.4. the whole code of plotting
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+Tai2 <- ggplot()+
+  #plot something on the graph
+  geom_sf(data=taiwan2_shp)+
+  geom_point(Climatedt1, mapping=aes(x=longitude, y=latitude, color=Auto, size=Auto))+
+  
+  #scale for the color, size or axis
+  scale_color_manual(name="Station Types",breaks=c(1, 0),values=c("#b3c145", "#321f0a"))+
+  scale_size_manual(name="Station Types",breaks=c(1, 0),values=c(0.9,3.0))+
+  coord_sf(xlim = c(118, 122.5), ylim = c(21.5, 26.5), crs=4326)+
+  
+  #put some text or other information
+  annotation_north_arrow(location = "tl", which_north = "true",
+                         #position of the north arrow
+                         pad_x = unit(0.2, "cm"), pad_y = unit(0.6, "cm"), 
+                         #size and style of the north arrow
+                         height = unit(1.0, "cm"), width = unit(1.0, "cm") , 
+                         style = north_arrow_fancy_orienteering(text_col = 'grey10', 
+                                                                line_col = 'grey10',
+                                                                fill = 'grey10'))+
+  #labeling for the axis and tilte
+  xlab("Longitude")+
+  ylab("Latitude")+
+  ggtitle("Taiwan's Climate Station Map")+
+  
+  #theme
+  theme(panel.border = element_rect(colour = "black", fill=NA, linewidth =1.0),
+        panel.background = element_rect(fill = "grey97", colour = "black"))
+
+Tai2
+
+```
+
+# Today's goal
+
+![](D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/JADE2.png){width="40%"}
+
+## 3.2. Using the world map function
+
+### 3.2.1. input the world map data
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+world.map <- map_data("world")
+
+```
+
+### 3.2.2. Plot the world map
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+
+ggplot(world.map, aes(x=long, y=lat, group=group))+
+  geom_polygon(colour="black", fill='grey85')
+```
+
+### 3.2.3. Take out Taiwan
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+
+ggplot(world.map, aes(x=long, y=lat, group=group))+
+  geom_polygon(colour="black", fill='grey85')+
+  coord_sf(xlim = c(118, 122.5), ylim = c(21.5, 26.5), crs = 4326)
+
+```
+
+## 3.3 Using DEM data
+
+### 3.3.1 Plotting whole Taiwan
+
+#### Loading the data of DEM data
+
+You can download the DEM data at : <https://data.gov.tw/dataset/35430>
+
+```{r  message=FALSE, warning=FALSE}
+library(raster)
+
+taiwan_DEM <- raster("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class13/TaiwanMapDEM/tif file/twdtm_asterV2_30m.tif" )
+```
+
+```{r  message=FALSE, warning=FALSE}
+land <- aggregate(taiwan_DEM, fact=5)
+Land_Eledt <- rasterToPoints(land)
+Land_Eledt2 <- as.data.frame(Land_Eledt) %>%
+  rename(elevation='Layer_1') 
+```
+
+### 3.3.2. Plotting the DEM of Taiwan
+
+```{r  message=FALSE, warning=FALSE , out.width="80%"}
+ggplot()+
+  geom_tile(Land_Eledt2, mapping=aes(x=x, y=y, fill=elevation))+
+  coord_sf(crs=4326)
+```
+
+#### Cut the region of Jade Moutain
+
+```{r  message=FALSE, warning=FALSE, out.width="80%"}
+Land_Eledt3 <- Land_Eledt2 %>%
+  filter(x>120.9, x<121.0, 
+         y>23.41, y<23.51)
+
+ggplot()+
+  geom_tile(Land_Eledt3, mapping=aes(x=x, y=y, fill=elevation))+
+  coord_sf(crs=4326)
+```
+
+#### Draw the contour
+
+```{r  message=FALSE, warning=FALSE, out.width="80%"}
+
+ggplot()+
+  geom_contour(Land_Eledt3, mapping=aes(x=x, y=y, z=elevation),binwidth =250)+
+  coord_sf(crs=4326)
+
+```
+
+#### Add the elevation on the contour line
+
+```{r  message=FALSE, warning=FALSE, out.width="80%"}
+
+library(metR) #install.packages("metR")
+
+ggplot()+
+  geom_contour(Land_Eledt3, mapping=aes(x=x, y=y, z=elevation), binwidth =250)+
+  coord_sf(crs=4326)+
+  geom_text_contour(data=Land_Eledt3 , mapping=aes(x=x, y=y, z=elevation), 
+                    stroke = 0.2, size=3,
+                    breaks = seq(0, 4000, by =250),
+                    col="grey40", stroke.color="#C6E0BE")
+```
+
+### 3.3.3. Whole code of plotting Contour plot
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+mypal <- colorRampPalette(c("#2EA858","#C6E0BE","#EAD6C6","#497b99"))
+
+JADE <- ggplot()+
+  #raster of the plot
+  geom_tile(Land_Eledt3, mapping=aes(x=x, y=y, fill=elevation))+
+  
+  #add a contour line
+  geom_contour(Land_Eledt3, mapping=aes(x=x, y=y, z=elevation), 
+               binwidth =250,color="#2EA858")+
+  
+  scale_fill_gradientn(colours = mypal(20))+
+  geom_text_contour(data=Land_Eledt3 , mapping=aes(x=x, y=y, z=elevation), 
+                    stroke = 0.2, size=3,
+                    breaks = seq(0, 4000, by =250),
+                    col="grey40", stroke.color="#C6E0BE")+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  
+  coord_sf(crs=4326)+
+  
+  #labeling for the axis and tilte
+  xlab("Longitude")+
+  ylab("Latitude")+
+  ggtitle("Contour plot of Jade Moutain")+
+  
+  #theme
+  theme(panel.border = element_rect(colour = "black", fill=NA, linewidth =1.0),
+        panel.background = element_rect(fill = "grey97", colour = "black"))
+
+
+JADE 
+
+```
+
+# Exercise
+
+Plot the mountain into the contour plot and add the name of the mountain.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE , out.width="80%"}
+library(osmdata) 
+
+
+Cod <- c( 120.9,23.41,
+         121.0,23.51)
+Peak <- opq(bbox = Cod) %>%
+  add_osm_feature(key = 'natural', 
+                  value=c("peak")) %>%
+  osmdata_sf()
+PeakP <- Peak$osm_points %>%
+  rename(nameEN="name:en") %>%
+  filter(ref!="<NA>") %>%
+  distinct(nameEN, .keep_all = T)
+JADE2 <- JADE+
+  geom_sf(data=PeakP, color="#00619f", fill="#b67373", shape=24 )+
+  geom_sf_text(data=PeakP,aes(label=nameEN), 
+                     color="black", vjust=1, hjust=-0.1,size=2)
+JADE2
+
+ggexport(JADE2, filename="JADE3.png",width=2000, height = 1800, res=300)
+
+```

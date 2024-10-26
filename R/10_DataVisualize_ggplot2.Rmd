@@ -1,0 +1,266 @@
+---
+title: "Class10"
+author: "Chen-Chia Ku"
+date: "2023-11-15"
+output:
+  pdf_document:
+    toc_depth: 5
+    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
+    latex_engine: xelatex # latex 引擎設定為 xelatex
+  html_document:
+    toc_depth: '3'
+    df_print: paged
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+header-includes:
+- \usepackage{fontspec} # 使用 fontspec package
+- \usepackage{xeCJK}    # 使用 xeCJK package
+- \setCJKmainfont{標楷體}
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+# Class Instruction:
+
+[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+
+# Last week
+Last week, we introduce some basic information of R plot function. And also introduce how to output the basic plot function.
+
+
+
+# 2. Into the basic plotting under ggplot()
+
+```{r message=FALSE, warning=FALSE}
+#install.packages("ggplot2")
+library(ggplot2)
+
+```
+
+```{r include=FALSE}
+library(showtext)
+showtext_auto()
+```
+
+```{r}
+Excerdt3 <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class10/Excerdt3.csv")
+
+```
+
+## 2.1. Histogram
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot()+
+  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value))
+
+#change the color
+ggplot()+
+  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black")
+
+#extract different color
+ggplot()+
+  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")
+
+#Add x lab and y lab
+ggplot()+
+  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")+
+  xlab("Precipitation (mm)")+
+  ylab("frequency")+
+  ggtitle("Frequency of precipitation")
+
+# YOU can give this plot a name
+His <- ggplot()+
+  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")+
+  xlab("Precipitation (mm)")+
+  ylab("frequency")+
+  ggtitle("Frequency of precipitation")
+
+```
+
+## 2.2. Density plot
+histograms use bars and density use lines to present the frequency.
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot()+
+  geom_density(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")
+
+# make the different color into different station
+ggplot()+
+  geom_density(data=Excerdt3, mapping=aes(x=Precip_value, fill=stationName), color="black")
+
+ggplot()+
+  geom_density(data=Excerdt3, mapping=aes(x=Precip_value, fill=stationName), color="black", alpha=0.3)
+
+ggplot()+
+  geom_density(data=Excerdt3, mapping=aes(x=Precip_value, fill=stationName), color="black", alpha=0.3)+
+  xlab("Precipitation (mm)")+
+  ylab("frequency")+
+  ggtitle("Frequency of precipitation")
+
+```
+
+## 2.3. Bar plot
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot()+
+  geom_col(Excerdt3, mapping=aes(x=stationName, y=Precip_value))
+
+ggplot(Excerdt3,aes(x=stationName, y=Precip_value))+
+  geom_col()
+
+```
+
+### 2.2.1. change the bar position
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot(Excerdt3,aes(x=stationName, y=Precip_value))+
+  geom_col(fill="grey50", color="black")
+
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black")
+
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "stack")
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "fill")
+```
+
+### 2.2.2. Change the color 
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")+
+  scale_fill_manual(name="Year", values=c("red", "blue", "yellow", "grey50", "black"))
+
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")+
+  scale_fill_manual(name="Year", values=c("#153049", "#385487", "#25A184", "#A9D13F", "#F3E949", "#FAF6B3"))
+
+```
+
+### 2.2.3. Use the color palette
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+
+mypal <- colorRampPalette(c("#153049","#443A83","#287D8E","#25AB82","#98CC48","#F0E51D","#f5ed67","#FAF6B3"))
+
+```
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")+
+  scale_fill_manual(name="Year", values=mypal(10))# change the value of the palette
+
+ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")+
+  scale_fill_manual(name="Year", values=mypal(10))+
+  xlab("station")+
+  ylab("precipitation(mm)")
+
+Bar <- ggplot(Excerdt3, aes(x=stationName, y=Precip_value, fill=as.factor(Y)))+
+  geom_col(color="black", position = "dodge")+
+  scale_fill_manual(name="Year", values=mypal(10))+
+  xlab("station")+
+  ylab("precipitation(mm)")
+
+
+```
+
+
+## 2.3. Point
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()
+
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+
+```
+
+### 2.3.1 scaling the axis
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  
+  scale_x_continuous(limits = c(0,30))+
+  scale_y_continuous(limits= c(0, 6000))+
+  
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  
+  scale_x_continuous(limits = c(0,30), breaks = c(0,5, 10,15, 20, 25,30))+
+  scale_y_continuous(limits= c(0, 6000), breaks=c(0, 1000,2000, 3000, 4000, 5000, 6000))+
+  
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  
+  scale_x_continuous(limits = c(0,30), 
+                     breaks = seq(0,30, by=10))+
+  scale_y_continuous(limits= c(0, 6000), 
+                     breaks=seq(0, 6000, by=100))+
+  
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  
+  scale_x_continuous(limits = c(0,30), 
+                     breaks = seq(0,30, by=10), 
+                     labels=seq(0, 3, by=1))+
+  scale_y_continuous(limits= c(0, 6000), 
+                     breaks=seq(0, 6000, by=1500))+
+  
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+Pointplot <- ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
+  geom_point()+
+  
+  scale_x_continuous(limits = c(0,30), 
+                     breaks = seq(0,30, by=10), 
+                     labels=seq(0, 3, by=1))+
+  scale_y_continuous(limits= c(0, 6000), 
+                     breaks=seq(0, 6000, by=1500))+
+  
+  xlab(expression("Temperature " (degree*C)))+
+  ylab("precipitation(mm)")
+
+```
+
+
+
+## save the plot
+
+```{r  message=FALSE, warning=FALSE, out.width="80%"}
+# Export the graph
+ggsave(Pointplot,filename = "Pointplot_gsave.png",  width = 10, height=10, units="cm", dpi=300)
+
+```
+
+```{r message=FALSE, warning=FALSE, out.width="80%"}
+library(ggpubr) #install.packages("ggpubr")
+
+ggexport(Pointplot, filename = "Pointplot_gexport.png", width=3000, height=3000, res=1500)
+```
