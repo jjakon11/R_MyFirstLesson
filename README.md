@@ -12,7 +12,7 @@ The repository’s name is intended to emphasize that this is my first R class f
 
 The Course schedule are as following: 
 
--   1. Starting with R
+-   1. [Starting with R](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/1_StartingWithR.Rmd)
 -   2. Basic R: Data types
 -   3. Basic R: matrix
 -   4. Basic R: Read Data
@@ -30,3 +30,5 @@ The Course schedule are as following:
 This version of the course content is still a work in progress. The .rmd file reflects the real course experience, though occasionally students need more time for practice, and classes may fall slightly behind the original schedule.
 
 ***
+
+
