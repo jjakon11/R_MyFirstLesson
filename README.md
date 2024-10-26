@@ -33,6 +33,8 @@ The Course schedule are as following:
 This version of the course content is still a work in progress. The .rmd file reflects the real course experience, though occasionally students need more time for practice, and classes may fall slightly behind the original schedule.
 
 ## After 14 hour, You will be a Pro Man
+<img src="Output/JADE2.png" width="600"/>
+
 
 ![](Output/JADE2.png)
 
