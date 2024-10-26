@@ -44,7 +44,7 @@ This version of the course content is still a work in progress. The .rmd file re
 
 ***
 
-Contact information: 
+## Contact information: 
 
 **Chen-Chia Ku** </br>
 jjakon11@gmail.com </br>
