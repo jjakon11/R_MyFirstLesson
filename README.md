@@ -34,7 +34,7 @@ This version of the course content is still a work in progress. The .rmd file re
 
 ## After 14 hour, You will be a Pro Man
 
-![](E:/Drive/2_lab/Edu5_Course/R_MyFisrtLesson/Output/JADE2.png)
+![](Output/JADE2.png)
 
 ## Reference
 
