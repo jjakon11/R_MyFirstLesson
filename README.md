@@ -1,4 +1,4 @@
-# My Fisrt R Lesson
+# My First R Lesson
 
 *What will you do when you encounter an error*  
 
