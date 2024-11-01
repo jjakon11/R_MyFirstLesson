@@ -24,11 +24,11 @@ The Course schedule are as following:
 -   7. [Tidy Data: Combine Multiple Data](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/7_DataTidy_BindMultipleData)
 -   8. [Tidy Data: spread and gather](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/8_DataTidy_Fat%26ThinData)
 -   9. [Data Visualization: R base plot](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/9_DataVisualize_RbasePlot)
--   10. [Data Visualization: introduction of ggplot2](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/10_DataVisualize_ggplot2.Rmd)
--   11. [Data Visualization: ggplot2 decoration](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/11_DataVisualize_ggTheme.Rmd)
+-   10. [Data Visualization: introduction of ggplot2](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/10_DataVisualize_ggplot2)
+-   11. [Data Visualization: ggplot2 decoration](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/11_DataVisualize_ggTheme)
 -   12. [Data Visualization: geospatial](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/12_DataVisualize_geospatial.Rmd)
 -   13. [Data Visualization: Contour plot](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/13_DataVisualize_Coutour.Rmd)
--   14. [Data Visualization: Climate Diagram](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/14_DataVisualize_ClimateDiagram.Rmd)
+-   14. [Data Visualization: Climate Diagram](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/14_DataVisualize_ClimateDiagram)
 
 This version of the course content is still a work in progress. The .rmd file reflects the real course experience, though occasionally students need more time for practice, and classes may fall slightly behind the original schedule.
 
