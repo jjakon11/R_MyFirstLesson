@@ -1,8 +1,10 @@
 ---
-title: "Class 2"
+title: "Class 2_Basic R Data Types"
 author: "Chen-Chia Ku"
 date: "2023-09-20"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
   html_document:
@@ -28,44 +30,11 @@ header-includes:
 editor_options:
   chunk_output_type: console
 ---
+# **Class 2:Basic R Data Types**
 
-# Last week
+# 1. Data strucutres
 
--   Last week, we introduce some information about R and R studio
-
--   Basic frame work of R
-
-    -   Package
-    -   Function
-    -   Argument
-
--   Basic data calculation
-
-# Today's goal:  **Create a temperature vector** 
-
--   Basic data types
-
-    -   Numeric
-
-    -   Character
-
-    -   Logical
-
--   Data structures
-
-    -   **Vector**
-
-    -   *Matrix*
-
-    -   *Factors*
-
-    -   *Data Frames*
-
-    -   *Lists*
-
-# 4. Data strucutres
-
-## 4.1. Variables and Basic Arithmetic
+## 1.1. Variables and Basic Arithmetic
 
 -   Use R as a normal calculator
 
@@ -91,11 +60,11 @@ z <- x+y
 z
 ```
 
-## 4.2. Basic data types
+## 1.2. Basic data types
 
 We can use class() to check what kind of variable is being used. **class()** is a  function that can used to understand the encoding properties.
 
-### 4.2.1. Numeric
+### 1.2.1. Numeric
 
 ```{r message=FALSE, warning=FALSE}
 number <- 4.3
@@ -112,7 +81,7 @@ class(integer)
 
 ```
 
-### 4.2.2. Character
+### 1.2.2. Character
 
 To introduce characters, we need to use quotation marks.
 
@@ -122,7 +91,7 @@ class(world)
 
 ```
 
-### 4.2.3. Logical
+### 1.2.3. Logical
 
 Logical class encodes Boolean values-\> TRUE and FALSE
 
@@ -135,13 +104,13 @@ is.character(world) # ask whether "world" is character or not
 is.numeric(world) # ask whether "world" is numeric or not
 ```
 
-### 4.2.4. Special data type: NULL and NA
+### 1.2.4. Special data type: NULL and NA
 
 -   **Null** means an empty object: contain no information
 
 -   **NA** means a non-available entry and representing a missing value in data analysis: contain information.
 
-## 4.3. Vectors
+## 1.3. Vectors
 
 A vector is an array of elements.We can create vectors in R with the command **c()** and the elements inside separated by commas
 
@@ -187,7 +156,7 @@ class(Example3)
 
 ### More information of numeric vectors
 
-#### 4.3.1. Produce a consecutive numbers
+#### 1.3.1. Produce a consecutive numbers
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 c(0,1,2,3,4,5,6,7,8,9,10)
@@ -221,7 +190,7 @@ rep(seq(0,1000, by=25), each=10)
 
 ```
 
-#### 4.3.2. Label the names to the numeric vector
+#### 1.3.2. Label the names to the numeric vector
 
 **names()** is a function to check or get the name of each object
 
@@ -259,7 +228,7 @@ temperature["Wednesday"]
 
 ```
 
-#### 4.3.3. Logical vector
+#### 1.3.3. Logical vector
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 rains>0
@@ -280,7 +249,7 @@ rains[temperature>=29]
 
 ```
 
-#### 4.3.4. Order and sort the vector
+#### 1.3.4. Order and sort the vector
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 order(temperature)
@@ -298,7 +267,7 @@ quantile(temperature)
 quantile(temperature, 0.05)
 ```
 
-# Excercise
+# 2. Excercise
 
 -   Please build two separate vectors for temperature and precipitation, each labeled with the name of the day of the week (Sunday to Saturday, 9/10-9/16).
 
@@ -309,4 +278,4 @@ quantile(temperature, 0.05)
 
     2.  What was the total precipitation in Taichung last week?
 
-    3.  How many days did precipitation exceed 30mm in a day?
+    3.  How many days did precipitation exceed 30 mm in a day?
