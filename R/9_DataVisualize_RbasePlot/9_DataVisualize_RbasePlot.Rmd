@@ -3,6 +3,8 @@ title: "Class9"
 author: "Chen-Chia Ku"
 date: "2023-11-07"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
     keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
@@ -30,18 +32,13 @@ header-includes:
 editor_options:
   chunk_output_type: console
 ---
-
-# Class Instruction:
-
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+# **Class 9: Data Visualize, Rbase Plot**
 
 # Why we need to plot something out?
 
-![](D:/Drive/6_Rworld/30daysMapChallenge_2023/Day1_Points/Taiwan%20CS%20map.png){width="60%"}
+<img src="https://github.com/jjakon11/30DayMapChallenge/blob/main/2023_Challenge/Map/Day2_Lines.png" width="500"/>
 
-![](D:/Drive/2_lab/Pro12_CollapseTreeH/BestModel.png){width="60%"}
-
-![](D:/Drive/2_lab/Dt1_ClimateData/ClimateDiagram/Alishan%20ClimDiagram.png){width="60%"}
+<img src="https://github.com/jjakon11/30DayMapChallenge/blob/main/2024_Challenge/Map/Day1_Points.png" width="500"/>
 
 Visualization is a powerful way to convey the ideas and findings of your research or to present data effectively.
 
@@ -59,13 +56,15 @@ Visualization is a powerful way to convey the ideas and findings of your researc
 
 # 1. Basic plot
 
+## 1.1 Read data
+
 ```{r message=FALSE, warning=FALSE}
 
-Excerdt3 <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class9/Excerdt3.csv")
+Excerdt3 <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/9_DataVisualize_RbasePlot/Attachment/Excerdt3.csv")
 
 ```
 
-## 1.1 Histogram
+## 1.2 Histogram
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 hist(Excerdt3$Precip_value)
@@ -76,7 +75,7 @@ hist(Excerdt3$Precip_value, main="Precipitation frequency")
 
 ```
 
-## 1.2 Scatter plot
+## 1.3 Scatter plot
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 plot( x=Excerdt3$Z,y=Excerdt3$averageT_value)
@@ -90,7 +89,8 @@ plot(Excerdt3$Precip_value,Excerdt3$averageT_value, col = Excerdt3$station, pch=
 
 Here are different types of the point, change the types of the point with the numbers.
 
-![](D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class9/PCH.jpg)
+<img src="Attachment/PCH.jpg" width="500"/>
+
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 plot(Excerdt3$Precip_value,Excerdt3$averageT_value, col = Excerdt3$station, pch=20)
@@ -108,18 +108,18 @@ plot(Excerdt3$Precip_value,Excerdt3$averageT_value,
 
 ```
 
-## 1.3 Boxplot
+## 1.4 Boxplot
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 boxplot(Excerdt3$Precip_value~Excerdt3$station)
 
 ```
 
-## 1.4 save your plot
+## 1.5 save your plot
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 
-png("rplot.png", width = 5000, height = 5000,res=1000)
+png("Excercise_output/rplot.png", width = 5000, height = 5000,res=1000)
 plot(Excerdt3$Precip_value,Excerdt3$averageT_value, 
      col = Excerdt3$station, pch=19 ,cex=3, main="This is a title", 
      xlab="Precipitation (mm)", ylab="Average temperature (C)") 
@@ -127,56 +127,4 @@ dev.off()
 
 ```
 
-# 2. Into the basic plotting under ggplot()
 
-```{r message=FALSE, warning=FALSE}
-#install.packages("ggplot2")
-library(ggplot2)
-
-```
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value))
-
-#change the color
-ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black")
-
-#extract different color
-ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")
-
-#Add x lab and y lab
-ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")+
-  xlab("Precipitation (mm)")+
-  ylab("frequency")+
-  ggtitle("Frequency of precipitation")
-
-#Play with ggplot
-ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")+
-  xlab("Precipitation (mm)")+
-  ylab("frequency")+
-  ggtitle("Frequency of precipitation")+
-  facet_wrap(~stationName)
-
-# YOU can give this plot a name
-His <- ggplot()+
-  geom_histogram(data=Excerdt3, mapping=aes(x=Precip_value), color="black", fill="#144D69")+
-  xlab("Precipitation (mm)")+
-  ylab("frequency")+
-  ggtitle("Frequency of precipitation")+
-  facet_wrap(~stationName)
-
-# Export the graph
-ggsave(filename = "His.png", His, width = 100, height=100, units="cm", dpi=300, limitsize = FALSE)
-
-```
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-library(ggpubr)
-
-ggexport(His, filename = "His2.png", width=1000, height=1000, res=300)
-```
