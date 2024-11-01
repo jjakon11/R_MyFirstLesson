@@ -3,10 +3,12 @@ title: "Class11"
 author: "Chen-Chia Ku"
 date: "2023-11-22"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
-    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
-    latex_engine: xelatex # latex 引擎設定為 xelatex
+    keep_tex: no 
+    latex_engine: xelatex 
   html_document:
     toc_depth: '3'
     df_print: paged
@@ -19,8 +21,8 @@ output:
     highlight: tango
     toc_depth: 3
 header-includes:
-- \usepackage{fontspec} # 使用 fontspec package
-- \usepackage{xeCJK}    # 使用 xeCJK package
+- \usepackage{fontspec} 
+- \usepackage{xeCJK}    
 - \setCJKmainfont{標楷體}
 - \usepackage{enumitem}
 - \setlistdepth{15}
@@ -34,31 +36,33 @@ editor_options:
   chunk_output_type: console
 ---
 
+
 ```{r include=FALSE}
 library(showtext)
 showtext_auto()
-library(ggpubr)
+
 ```
 
-# Class Instruction:
 
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+# **Class 11: Data Visualization, ggTheme**
 
-# Library
+
+# 1. Library
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
 library(dplyr)
+library(ggpubr)
 ```
 
-# Data
+# 2. Read data
 
 ```{r message=FALSE, warning=FALSE}
-Excerdt3 <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class11/Excerdt3.csv")
+Excerdt3 <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/11_DataVisualize_ggTheme/Attachment/Excerdt3.csv")
 
 ```
 
-# Last week
+# 3. Review class 10
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 #Histogram
@@ -105,9 +109,9 @@ ggarrange(His, Dens, Bar, Pointplot, ncol=2, nrow=2)
 
 ```
 
-# 2. Into the basic plotting under ggplot() (coninue...)
+# 4. Continue the basic plot under ggplot()
 
-## 2.4 Facet wrap
+## 4.1 Facet wrap
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 Point_wrap <- ggplot(Excerdt3, aes(x=averageT_value, y=Precip_value))+
@@ -128,7 +132,7 @@ Point_wrap
 
 ```
 
-## 2.5 Line
+## 4.2 Line
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 lineplot <- ggplot(Excerdt3, aes(x=Y, y=Precip_value, group=stationName ))+
@@ -147,9 +151,9 @@ lineplot
 
 ```
 
-## 2.6 Theme family
+## 4.3 Theme family
 
-![](D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class11/theme.jpg)
+<img src="Attachment/theme.jpg" width="500"/>
 
 ```{r eval=FALSE,message=FALSE, warning=FALSE}
 theme(
@@ -327,14 +331,14 @@ Pointplot2 <- Pointplot+
 
 ```{r  message=FALSE, warning=FALSE, out.width="80%"}
 # Export the graph
-ggsave(Pointplot2,filename = "Pointplot3_gsave.png",  width = 20, height=10, units="cm", dpi=300)
+ggsave(Pointplot2,filename = "Excercise_output/Pointplot3_gsave.png",  width = 20, height=10, units="cm", dpi=300)
 
 ```
 
 ```{r message=FALSE, warning=FALSE, out.width="80%"}
 library(ggpubr) #install.packages("ggpubr")
 
-ggexport(Pointplot2, filename = "Pointplot3_gexport.png", width=3800, height=3000, res=800)
+ggexport(Pointplot2, filename = "Excercise_output/Pointplot3_gexport.png", width=3800, height=3000, res=800)
 ```
 
 ## 2.8.Combine the all the plot together
@@ -346,5 +350,5 @@ gPloting <- ggarrange(His,Bar, lineplot, Pointplot2,
                       ncol = 1, nrow = 4, 
                       labels = c("(a)", "(b)", "(c)", "(d)"))
 
-ggexport(gPloting , filename = "gPloting _gexport.png", width=7000, height=6000, res=500)
+ggexport(gPloting , filename = "Excercise_output/gPloting _gexport.png", width=7000, height=6000, res=500)
 ```
