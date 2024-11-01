@@ -3,6 +3,8 @@ title: "Class6"
 author: "Chen-Chia Ku"
 date: "2023-10-18"
 output:
+  md_document:
+    variant: markdown_github
   rmdformats::readthedown:
     css: custom.css
     self_contained: yes
@@ -16,8 +18,8 @@ output:
     df_print: paged
   pdf_document:
     toc_depth: 5
-    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
-    latex_engine: xelatex # latex 引擎設定為 xelatex
+    keep_tex: no 
+    latex_engine: xelatex 
 header-includes:
 - \usepackage{enumitem}
 - \setlistdepth{15}
@@ -30,99 +32,29 @@ header-includes:
 editor_options:
   chunk_output_type: console
 ---
+# **Class 6: Data Tidy, Grouping**
 
-# Class Instruction:
+# Read the data first
+```{r}
+Taidt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/6_DataTidy_Grouping/Attachment/Taichung2013_2023.csv")
 
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+head(Taidt)
+```
 
-# Tidy your data.
+
+# 1. Using pipe %\>%
+
+R pipes are a way to chain multiple operations together in a concise and expressive way. They are represented by the **%\>%** operator, which takes the output of the expression on its left and passes it as the first argument to the function on its right
+
+**This is your data** %\>% **select( )** %\>% **filter( )** %\>% **Result**
+ <img src="Attachment/pipes_image0.png" width="500"/>
 
 In the following section, I will introduce some information about how to tidy your own data by R programming. Here, I will use **dplyr** package to tidy the data.
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr) # install.package("dplyr")
-
 ```
 
-# 1. Input the Data
-
-```{r message=FALSE, warning=FALSE}
-
-Taidt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class6/Taichung2013_2023.csv")
-
-head(Taidt)
-```
-
-# 2. Basic tidy data function
-
-## 2.1 select()
-
-Use **select()** to select the column.
-
-```{r echo=T, list(width.cutoff=80), tidy=TRUE, tidy.opts=list(width.cutoff=80)}
-Taidt1  <- select(Taidt, station, Y, M, D, tavg, tmax, tmin, prec)
-head(Taidt1)
-
-Taidt1.1 <- select(Taidt, -X, -YMD, -AvgWS,-AvgWD)
-
-```
-
-## 2.2. filter()
-
-Use **filter()** to filter the variable in the specific column.
-
-```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-Taidt2 <- filter(Taidt1, Y<=2017) 
-head(Taidt2)
-table(Taidt2$Y)
-table(Taidt2$Y, Taidt2$M)
-```
-
-## 2.3. mutate()
-
-Use **mutate()** to add one column.
-
-```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-Taidt3 <- mutate(Taidt2, YMD=paste(Y, M, D, sep="_"))
-Taidt3.1 <- mutate(Taidt2, xx=1); head(Taidt3.1)
-head(Taidt3)
-str(Taidt3)
-
-Taidt3.2 <- mutate(Taidt2, cal=Y*M*D)
-head(Taidt3.2)
-
-Taidt4 <- mutate(Taidt3, station=as.character(station))
-str(Taidt4)
-```
-
-## 2.4. rename()
-
-Use **rename()** to rename the column name.
-
-```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-Taidt5 <- rename(Taidt4, precipitation="prec")
-head(Taidt5)
-```
-
-If we combine all of the code together, we will found out that the their are so many name of the data.
-
-```{r message=FALSE, warning=FALSE}
-Taidt1 <- select(Taidt, station, Y, M, D, tavg, tmax, tmin, prec)
-Taidt5 <- rename(Taidt1, precipitation="prec")
-Taidt2 <- filter(Taidt1, Y<=2017) 
-Taidt3 <- mutate(Taidt2, YMD=paste(Y, M, D, sep="_"))
-Taidt4 <- mutate(Taidt3, station=as.character(station))
-
-
-```
-
-## 2.5 pipe %\>%
-
-R pipes are a way to chain multiple operations together in a concise and expressive way. They are represented by the **%\>%** operator, which takes the output of the expression on its left and passes it as the first argument to the function on its right
-
-**This is your data** %\>% **select( )** %\>% **filter( )** %\>% **Result**
-
-![](pipes_image0.png){width="442"}
 
 ```{r echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
 Taidt6 <- Taidt %>%
@@ -150,9 +82,9 @@ hist(Taidt6$tavg)
 boxplot(Taidt6$tavg~Taidt6$M)
 ```
 
-# 3. Groupping data function
+# 2. Groupping data function
 
-## 3.1. summarise()
+## 2.1. summarise()
 
 using **summarise()** could calculate the value in high efficiency under **pipe** and **dplyr package**.
 
@@ -166,7 +98,7 @@ Taidt7 <- Taidt6 %>%
 head(Taidt7)
 ```
 
-## 3.2. group_by()
+## 2.2. group_by()
 
 By using **group_by**, you can aggregate the categories of your own variable and using **summarise()** to calculate the value of each variable.
 
