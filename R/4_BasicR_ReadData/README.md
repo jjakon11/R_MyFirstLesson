@@ -24,7 +24,7 @@ class(climate)
 
     ## [1] "matrix" "array"
 
-#2. Data frame
+# 2. Data frame
 
 ## 2.1 Create the Data
 
@@ -67,7 +67,7 @@ str(DF)
     ##  $ x        : int  10 9 8 7 6 5 4 3 2 1
     ##  $ y        : int  -4 -3 -2 -1 0 1 2 3 4 5
     ##  $ sp       : chr  "A" "B" "C" "D" ...
-    ##  $ abundance: int  590 835 851 55 143 114 837 884 710 390
+    ##  $ abundance: int  515 913 197 931 495 93 367 736 345 402
 
 ``` r
 View(DF)
@@ -76,21 +76,21 @@ head(DF)
 ```
 
     ##    x  y sp abundance
-    ## 1 10 -4  A       590
-    ## 2  9 -3  B       835
-    ## 3  8 -2  C       851
-    ## 4  7 -1  D        55
-    ## 5  6  0  E       143
-    ## 6  5  1  F       114
+    ## 1 10 -4  A       515
+    ## 2  9 -3  B       913
+    ## 3  8 -2  C       197
+    ## 4  7 -1  D       931
+    ## 5  6  0  E       495
+    ## 6  5  1  F        93
 
 ``` r
 head(DF, 3)
 ```
 
     ##    x  y sp abundance
-    ## 1 10 -4  A       590
-    ## 2  9 -3  B       835
-    ## 3  8 -2  C       851
+    ## 1 10 -4  A       515
+    ## 2  9 -3  B       913
+    ## 3  8 -2  C       197
 
 ``` r
 nrow(DF)
@@ -155,7 +155,7 @@ str(DF)
     ##  $ x        : int  10 9 8 7 6 5 4 3 2 1
     ##  $ y        : int  -4 -3 -2 -1 0 1 2 3 4 5
     ##  $ sp       : Factor w/ 10 levels "A","B","C","D",..: 1 2 3 4 5 6 7 8 9 10
-    ##  $ abundance: int  590 835 851 55 143 114 837 884 710 390
+    ##  $ abundance: int  515 913 197 931 495 93 367 736 345 402
 
 The difference between data frame and matrix is that matrix can only
 contain a single class of data, while data frames can consist of many
@@ -435,7 +435,7 @@ rm(mydt4, mydt5, iris)
 load("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/myiris.rdata")
 ```
 
-#3. Lists
+# 3. Lists
 
 Lists can be conceived as vectors made of elements which can be of
 different lengths, sizes, type, etc. It can contain a numerous type of

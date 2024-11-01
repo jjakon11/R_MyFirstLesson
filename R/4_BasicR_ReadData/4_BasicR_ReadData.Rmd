@@ -50,7 +50,7 @@ climate
 class(climate)
 ```
 
-#2. Data frame
+# 2. Data frame
 
 ## 2.1 Create the Data
 
@@ -199,7 +199,7 @@ load("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/
 
 ```
 
-#3. Lists
+# 3. Lists
 
 Lists can be conceived as vectors made of elements which can be of different lengths, sizes, type, etc. It can contain a numerous type of data, including vectors, matrix and data frames. You can imagine that List is a room of data, and that contain a numerous type of data in different layer.
 
