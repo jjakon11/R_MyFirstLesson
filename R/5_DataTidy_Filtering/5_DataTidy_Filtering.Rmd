@@ -7,8 +7,8 @@ output:
     variant: markdown_github
   pdf_document:
     toc_depth: 5
-    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
-    latex_engine: xelatex # latex 引擎設定為 xelatex
+    keep_tex: no 
+    latex_engine: xelatex 
   rmdformats::readthedown:
     css: custom.css
     self_contained: yes
@@ -89,28 +89,6 @@ Use **rename()** to rename the column name.
 Taidt5 <- rename(Taidt4, precipitation="prec")
 ```
 
-## 2.5 pipe %\>%
-
-R pipes are a way to chain multiple operations together in a concise and expressive way. They are represented by the **%\>%** operator, which takes the output of the expression on its left and passes it as the first argument to the function on its right
-
-**This is your data** %\>% **select( )** %\>% **filter( )** %\>% **Result**
-
- <img src="Attachment/pipes_image0.png" width="500"/>
-
-
-```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-Taidt6 <- Taidt %>%
-  select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
-  filter(Y<=2017) %>%
-  mutate(YMD=paste(Y, M, D, sep="_")) %>%
-  mutate(station=as.character(station)) %>%
-  ## Or you can type...
-  # mutate(YMD=paste(Y, M, D, sep="_"), 
-  #        station=as.character(station)) %>%
-  rename(precipitation="prec")
-  
-  
-```
 
 # Excercise
 

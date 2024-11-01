@@ -51,30 +51,6 @@ Use **rename()** to rename the column name.
 Taidt5 <- rename(Taidt4, precipitation = "prec")
 ```
 
-## 2.5 pipe %\>%
-
-R pipes are a way to chain multiple operations together in a concise and
-expressive way. They are represented by the **%\>%** operator, which
-takes the output of the expression on its left and passes it as the
-first argument to the function on its right
-
-**This is your data** %\>% **select( )** %\>% **filter( )** %\>%
-**Result**
-
-<img src="Attachment/pipes_image0.png" width="500"/>
-
-``` r
-Taidt6 <- Taidt %>%
-    select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
-    filter(Y <= 2017) %>%
-    mutate(YMD = paste(Y, M, D, sep = "_")) %>%
-    mutate(station = as.character(station)) %>%
-    ## Or you can type...  mutate(YMD=paste(Y, M,
-    ## D, sep='_'),
-    ## station=as.character(station)) %>%
-rename(precipitation = "prec")
-```
-
 # Excercise
 
 The following exercise is going to prepare for your next week data.
