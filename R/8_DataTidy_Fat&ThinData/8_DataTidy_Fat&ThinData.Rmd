@@ -198,7 +198,8 @@ ggplot(Complex_long3, mapping=aes(x=stationName, y=averageT_Diff))+
 
 ```
 
-#3.  Excercise
+# 3.  Excercise
+
 Try to tidy your own research data by using spread() and gather().
 
 Please send .rmd file and the data that you input in your code to my email: [*jjakon11\@gmail.com*](mailto:jjakon11@gmail.com){.email}

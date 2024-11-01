@@ -283,8 +283,9 @@ ggplot(Complex_long3, mapping=aes(x=stationName, y=averageT_Diff))+
 
 ![](8_DataTidy_Fat-ThinData_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
-#3. Excercise Try to tidy your own research data by using spread() and
-gather().
+# 3. Excercise
+
+Try to tidy your own research data by using spread() and gather().
 
 Please send .rmd file and the data that you input in your code to my
 email: <a href="mailto:jjakon11@gmail.com"
