@@ -1,0 +1,370 @@
+---
+title: "Class 1:Starting with R"
+author: "Chen-Chia Ku"
+date: "2023-09-13"
+output:
+  md_document:
+    variant: markdown_github
+  rmdformats::readthedown:
+    css: custom.css
+    self_contained: yes
+    thumbnails: no
+    lightbox: yes
+    gallery: yes
+    highlight: tango
+    toc_depth: 3
+  pdf_document:
+    toc_depth: 5
+header-includes:
+- \usepackage{enumitem}
+- \setlistdepth{15}
+- \renewlist{itemize}{itemize}{15}
+- \renewlist{enumerate}{enumerate}{15}
+- \setlist[itemize]{label=$\cdot$}
+- \setlist[itemize,1]{label=\textbullet}
+- \setlist[itemize,2]{label=--}
+- \setlist[itemize,3]{label=*}
+editor_options:
+  chunk_output_type: console
+---
+
+
+# 1. What is R?
+    
+ <img src="Attachment/R.png" width="500"/>
+     
+
+-   R is a programming language and software environment for statistical analysis, graphics representation and reporting.
+-   R Development Core Team:
+    -   **R**oss Ihaka and **R**obert Gentleman
+        -   That is the reason why this program call **R**
+        -   Develop from language S
+        -   University of Auckland, New Zealand
+    -   What special?
+        -   R is freely available under the GNU General Public License
+        -   pre-compiled binary versions are provided for various operating systems
+            -   Linux, Windows and Mac
+
+# 2. Rstudio
+
+  <img src="Attachment/RStudio.png" width="500"/>
+
+-   Rsudio is an integrated development environment for R
+-   free and open source software
+-   Provides a great way to use the R programming language and interact with other software components.
+-   Interface of Rstudio
+    -   Top right panel:
+        -   **Environment**: all variables, datasets, and functions stored are shown;
+        -   **History:** a summary of the actions taken in the session
+        -   **Connections:** to connectwith other data sources
+    -   Bottom right panel:
+        -   **Files:** choose the working directory
+        -   **Plots:** show the graphics generated
+        -   **Packages:** libraries loaded are shown
+        -   **Help:** get assistance with functions and commands
+        -   **Viewer:** have a look at data structures
+    -   Bottom left panel:
+        -   Console
+        -   Terminal
+    -   Top left:
+        -   file window: we write our code programs and able to save it for further use.
+            -   **Script**: it is a .R file, a blank notebook
+            -   **R Markdown**: .Rmd file
+                -   Code is inserted in blocks called *chunks*.
+                -   Good to output: Allows to produce an HTML, PDF or Microsoft word report where text, code and outputs are shown at once in a pretty and understandable format.
+
+# 3. Basic frame work in R language
+
+-   Package
+
+-   Function
+
+-   Argument
+
+## 3.1.Package
+
+-   R packages are extensions to the R statistical programming language.
+-   Use library() to call out the package.
+-   One package will contain numerous of **function** to proceed the specific progress.
+    -   ggplot2 package: for data visualization
+    -   tidyverse package: for tidy the data
+    -   dplyr package: another package for tidy the data
+-   CRAN (Comprehensive R Archive Network): the main repository for R packages
+    -   The main advantage to getting your package on CRAN is that it will be easier for users to install.
+    -   base package
+    -   contributed package
+-   Having a package to do something:
+    1.  Install the package: install.packages("")
+    2.  Call your package out: library()
+
+```{r eval=FALSE, echo=T}
+install.packages("vegan")
+library(vegan)
+
+```
+
+## 3.2.Function
+
+-   Function is an object, a collection of instructions that perform specific operation
+
+```{r message=FALSE, warning=FALSE, echo = T, results = 'hide'}
+  x.vec <- c(1:5)
+  x.vec
+
+  mean(x.vec)
+  var(x.vec)
+  log(x.vec)
+
+```
+
+## 3.3.Argument
+
+-   A function usually requires input at least one argument or statistical formulas or model.
+
+-   Argument can be a numerical value, text, data frame or any object in R language.
+
+    -   Required argument
+    -   Optional argument
+    -   ellipsis argument
+
+```{r message=FALSE, warning=FALSE}
+lm(Sepal.Length~Petal.Length, data=iris)
+
+model <- lm(Sepal.Length~Petal.Length, data=iris)
+summary(aov(model))
+```
+
+# 4. Data strucutres
+
+## 4.1. Variables and Basic Arithmetic
+
+-   Use R as a normal calculator
+
+```{r message=FALSE, warning=FALSE, echo = T, results = 'hide'}
+3
+3+4
+3-5
+2*6
+5/3
+15%%2
+15%/%2
+```
+
+-   Define variables
+
+```{r message=FALSE, warning=FALSE, echo = T}
+x <- 4
+x
+
+y <- 5
+
+z <- x+y
+z
+```
+
+## 4.2. Basic data types
+
+we can use class() to check what knid of variable is being used.
+
+### 4.2.1. Numeric
+
+```{r message=FALSE, warning=FALSE}
+number <- 4.3
+class(number)
+```
+
+```{r message=FALSE, warning=FALSE, echo = T}
+2.73e4
+1/2.73e4
+```
+
+### 4.2.2. Character:
+
+to introduce characters, we need to use quatation marks.
+
+```{r message=FALSE, warning=FALSE}
+world <-"Hello World"
+class(world)
+
+```
+
+### 4.3.3. Logical
+
+logical class encodes Boolean values-\> TRUE and FALSE
+
+```{r message=FALSE, warning=FALSE}
+yes.no <- TRUE
+class(yes.no)
+```
+
+### 4.3.4. special data type: NULL and NA
+
+-   **Null** means an empty object: contain no information
+
+-   **NA** means a non-available entry and representing a missing value in data analysis: contain information.
+
+## 4.3. Vectors
+
+A vector is an array of elements.We can create vectors in R with the command **c()** and the elements inside separated by commas
+
+```{r message=FALSE, warning=FALSE}
+#Numeric
+VN <- c(1,2,3,4)
+VN
+length(VN)
+```
+
+```{r message=FALSE, warning=FALSE, echo = T}
+#Character
+VC <- c("Monday", "Tuesday", "Wednesday")
+VC
+
+#Logical
+VL <- c(TRUE, FALSE)
+VL
+
+```
+
+The command c() comes from combination, and it is used to combine elements that must be of homogeneous class.
+
+- If the data type is not the same...
+
+    -   The information will coerced into the same class
+
+    -   The hierarchy will be: Character \> Numeric \> Logical
+
+```{r message=FALSE, warning=FALSE}
+Example1 <- c(3.4, "Goodjob")
+class(Example1)
+
+Example2 <- c(TRUE, 3.4)
+class(Example2)
+
+Example3 <- c(NA, 3, 4)
+class(Example3)
+```
+
+###   More information of numeric vectors
+
+#### 4.3.1. Produce a consecutive numbers
+
+```{r message=FALSE, warning=FALSE, echo = T}
+c(0,1,2,3,4,5,6,7,8,9,10)
+0:10
+
+0:100
+c(0:100)
+seq(0,100, by=1)
+seq(0,100, by=25)
+
+# if we want to repeat a number or a group of number
+
+rep(c(3, 2,1), time=10)
+rep(c("Happy", "Angry", "Sad"), time=5)
+rep(c(TRUE, FALSE), time=3)
+
+rep(c(3,2,1), each=10)
+rep(c(3,2,1), times=c(2,1,3))
+
+```
+
+     
+#### 4.3.2. Label the names to the numeric vector
+
+
+```{r message=FALSE, warning=FALSE, echo = T}
+temperature <- c(28, 29, 27,27,30)
+names(temperature)
+
+names(temperature) <-c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+
+
+rains <- c(0, 5, 6, 0, 2)
+names(rains) <-c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+rains
+
+temperature+273.15
+temperature*1.8+32
+
+total.rains <- sum(rains)
+```
+
+If you are going to select the element in vector -\> use "brackets" **[ ]**
+  -   Bracket are used for indexing into a vector, matrix, array, list and dataframe.
+  -   Also called *extraction operators*, extract specific elements from a vector or matrix
+
+```{r message=FALSE, warning=FALSE, echo = T}
+
+rains[2]
+
+rains[c(1,2)]
+
+temperature[c(2,3,4)]
+temperature[2:4]
+temperature["Wednesday"]
+
+```
+
+       
+#### 4.3.3. Logical vector
+
+
+```{r message=FALSE, warning=FALSE, echo = T}
+rains>0
+temperature>=29
+
+# to select day whether the temperature is larger than 29 degree in rain vector
+rains[temperature>=29]
+
+# all(), checking whether the conditions are statisfied by all elements of the vector.
+all(temperature>=29)
+
+# any(),  checking whether the condition is satisfied by, at least, one element of the vector.
+any(temperature>=29)
+
+# which(), find the actual positions of those elements satisfying the condition and return the TRUE ones as a vector.
+which(temperature>=29)
+
+```
+
+       
+#### 4.3.4. Order and sort the vector
+
+
+```{r message=FALSE, warning=FALSE, echo = T}
+order(temperature)
+
+temperature[order(temperature)]
+
+# calculation
+sum(temperature)
+mean(temperature)
+sd(temperature)
+max(temperature)
+min(temperature)
+range(temperature)
+quantile(temperature)
+quantile(temperature, 0.05)
+```
+
+# Next Week
+
+-   Matrix
+-   Factors
+-   Data Frames
+-   Lists
+
+------------------------------------------------------------------------
+
+# Excercise
+
+-   Please build two separate vectors for temperature and precipitation, each labeled with the name of the day of the week (Sunday to Saturday).
+
+    -   *Ensure that the data is referenced from the Taichung weather station*
+    -   *Please refer to the data last week*
+
+    1.  What were the average, maximum, and minimum temperatures in Taichung last week?
+
+    2.  What was the total precipitation in Taichung last week?
+
+    3.  How many days did precipitation exceed 30mm in a day?
