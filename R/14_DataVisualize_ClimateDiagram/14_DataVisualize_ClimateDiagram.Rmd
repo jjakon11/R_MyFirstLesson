@@ -3,6 +3,8 @@ title: "Class14"
 author: "Chen-Chia Ku"
 date: "2023-12-13"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
     keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
@@ -34,6 +36,7 @@ editor_options:
   chunk_output_type: console
 always_allow_html: true
 ---
+# **Class 14: Data Visualization, Climate Diagram**
 
 # Class Instruction:
 
@@ -69,7 +72,7 @@ library(sp)
 library(dplyr)
 library(climatol)
 library(leafpop)
-dtw01 <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/World.csv", fileEncoding = "big5")
+dtw01 <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/14_DataVisualize_ClimateDiagram/Attachment/World.csv", fileEncoding = "big5")
 dtw0 <- dtw01 %>%
   arrange(variable, Country)
 dtw <- dtw0
@@ -116,25 +119,28 @@ diagwl(datcli,cols=NULL,stname="Example station",alt=100,per="1961-90",mlab="en"
 link( <https://www.cwa.gov.tw/V8/C/index.html> )
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-Taichung1<- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/TaichungClimatdt.csv")
+Taichung1<- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/14_DataVisualize_ClimateDiagram/Attachment/TaichungClimatdt.csv")
 head(Taichung1)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 diagwl(Taichung1[,-1],col=NULL,stname="Taichung",alt=84,per="1981-2010",mlab="en", shem=FALSE)
 ```
 
 #### save the plot
 
 ```{r}
-png(file="TaichungClimateDiagram.png",width =1600, height= 1800,res=300)
+png(file="Excercise_output/TaichungClimateDiagram.png",width =1600, height= 1800,res=300)
 diagwl(Taichung1[,-1],col=NULL,stname="Taichung",alt=84,per="1981-2010",mlab="en", shem=FALSE)
 dev.off()
 ```
 
 ## Exercise: Deal with the long data
 
-```{r echo=FALSE, message=FALSE, warning=FALSE , out.width="80%"}
+```{r echo=FALSE, message=FALSE, warning=FALSE }
 library(tidyr)
 
-TaichungLong<- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class14/Taichung2013_2023.csv")
+TaichungLong<- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/14_DataVisualize_ClimateDiagram/Attachment/Taichung2013_2023.csv")
 
 TaichungLong2 <- TaichungLong %>%
   group_by(Y, M) %>%
