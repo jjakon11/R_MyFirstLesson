@@ -3,6 +3,9 @@ title: "Class4"
 author: "Chen-Chia Ku"
 date: "2023-09-20"
 output:
+  md_document:
+    variant: markdown_github
+    
   pdf_document:
     toc_depth: 5
   rmdformats::readthedown:
@@ -29,18 +32,10 @@ header-includes:
 editor_options:
   chunk_output_type: console
 ---
+# **Class 4:Basic R Read Data**
 
-# Class Instruction:
 
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
-
-# Last week
-
-Last week, we introduce some basic information about vector and matrix. We now can build a vector and matrix with some climate information. And this week, we are going to transform the matrix into data frame type.
-
-# Today's goal: input your own data.
-
-## 4.4 Matrix
+# 1. Matrix
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 temperature <- c(28, 29, 27,27,30)
@@ -55,9 +50,9 @@ climate
 class(climate)
 ```
 
-## 4.5. Data frame
+#2. Data frame
 
-### 4.5.1 Create the Data
+## 2.1 Create the Data
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 climatedt <- data.frame(climate)
@@ -105,7 +100,7 @@ str(DF)
 
 The difference between data frame and matrix is that matrix can only contain a single class of data, while data frames can consist of many different class of data.
 
-### 4.5.2 Get the example data from package
+## 2.2 Get the example data from package
 
 ```{r message=FALSE, warning=FALSE, echo = T}
 data(iris)
@@ -119,28 +114,36 @@ head(iris)
 str(iris)
 ```
 
-### 4.5.3 Input data from your own data
+## 2.3 Input data from your own data
 
 Before input your data input, we need to setup working directory before we input or out put somethings.
 
-```{r message=FALSE, warning=FALSE, echo = T}
+```{r echo=TRUE, message=FALSE, warning=FALSE,eval=FALSE}
 # Check your own working directory
 getwd()
 
 # Set up your own working directory
-setwd("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4")
+setwd("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson")
 
-setwd("D:\\Drive\\2_lab\\Edu5_Course\\Rbasic\\Course_Rbasic")
 
-setwd("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic")
+# Different direction of your / and \\
+setwd("E:\\Drive\\2_lab\\Edu5_Course\\R_MyFirstLesson")
+
+
 ```
 
 ### read csv file
 
-```{r message=FALSE, warning=FALSE, echo = T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
+```{r message=FALSE, warning=FALSE, echo = T}
 
-mydt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/example.csv")
-mydt2 <- read.csv(file.choose()) #example.csv
+mydt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/example.csv")
+
+```
+
+
+```{r,eval=FALSE}
+# Or using file.choose to pop out a window to select the file by your own
+mydt2 <- read.csv(file.choose()) #example.csv # It was my favorite, but I don't love it anymore.
 
 #mydt <- read.csv(paste(getwd(), "/example.csv", sep=""))
 ```
@@ -148,55 +151,55 @@ mydt2 <- read.csv(file.choose()) #example.csv
 ### export the csv file
 
 ```{r}
-write.csv(climatedt, "climatedt.csv",  row.names = T)
+write.csv(climatedt, "Excercise_output/climatedt.csv",  row.names = T)
 ```
 
 *Excercise* --\> Read a file
 
 ```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-Excercise1 <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.csv", fileEncoding = "utf8")
+Excercise1 <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise.csv", fileEncoding = "utf8")
 
 #Any problem?
 
-Excercise <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.csv", fileEncoding = "big5")
+Excercise <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise.csv", fileEncoding = "big5")
 
 ```
 
 ### read txt file
 
-```{r message=FALSE, warning=FALSE, echo = T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-mydt3 <- read.table("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise.txt", fileEncoding = "big5", header=T)
+```{r message=FALSE, warning=FALSE, echo = T}
+mydt3 <- read.table("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise.txt", fileEncoding = "big5", header=T)
 
 ```
 
 ### read Excel file
 
-```{r echo=T, message=FALSE, warning=FALSE, list(width.cutoff=50), tidy=TRUE, tidy.opts=list(width.cutoff=50)}
+```{r echo=T, message=FALSE, warning=FALSE}
 library(readxl) #install.packages("readxl")
 
-mydt4 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet=1)
+mydt4 <- read_xlsx("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise2.xlsx", sheet=1)
 
-mydt5 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet=2)
+mydt5 <- read_xlsx("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise2.xlsx", sheet=2)
 
-mydt5 <- read_xlsx("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class4/Excercise2.xlsx", sheet="spcode")
+mydt5 <- read_xlsx("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/Excercise2.xlsx", sheet="spcode")
 
 ```
 
 ### a comprise Data in R
 
 ```{r message=FALSE, warning=FALSE, echo = T}
-save(mydt4, mydt5, iris, file="myiris.rdata")
+save(mydt4, mydt5, iris, file="E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/myiris.rdata")
 rm(mydt4, mydt5, iris)
 
 #mydt4 
 #mydt5
 #DF
 
-load("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/myiris.rdata")
+load("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/4_BasicR_ReadData/Attachment/myiris.rdata")
 
 ```
 
-## 5. Lists
+#3. Lists
 
 Lists can be conceived as vectors made of elements which can be of different lengths, sizes, type, etc. It can contain a numerous type of data, including vectors, matrix and data frames. You can imagine that List is a room of data, and that contain a numerous type of data in different layer.
 
@@ -214,7 +217,7 @@ Finally, we finish all of the basic information of R.
 
 Please input your own data and see what will happens.
 
-# Excercise
+# 4. Excercise
 
 1.  Please create a 4 x 7 matrix with temperature, precipitation, wind speed and wind direction as the row name and Monday to Sunday as the column name. Then, transfer the matrix into data frame.
 
