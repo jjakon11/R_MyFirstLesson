@@ -3,10 +3,12 @@ title: "Class7"
 author: "Chen-Chia Ku"
 date: "2023-10-25"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
-    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
-    latex_engine: xelatex # latex 引擎設定為 xelatex
+    keep_tex: no 
+    latex_engine: xelatex 
   html_document:
     toc_depth: '3'
     df_print: paged
@@ -31,11 +33,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Last week
+# **Class 7: Data Tidy, Bind Multiple Data**
 
-Last week, we introduce some information  about **pipe %>%**, which can connect the function with one orignal dataset together. And also learn some information about **group_by** and **summarise()**. To aggregate the data for different variable.
-
-# Review
+# 1. Review from Class 6
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr) # install.package("dplyr")
@@ -44,9 +44,7 @@ library(dplyr) # install.package("dplyr")
 
 
 ```{r message=FALSE, warning=FALSE}
-Taidt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Taichung2013_2023.csv")
-
-
+Taidt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/Taichung2013_2023.csv")
 
 Taidt6 <- Taidt %>%
   select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
@@ -81,41 +79,11 @@ Taidt9
 ```
 
 
-```{r eval=FALSE, include=FALSE}
-climate <- read.csv("D:/2_lab/Dt1_ClimateData/1950-202303全台局屬測站氣象資料(d).csv", fileEncoding = "big5") 
-
-st <-levels(as.factor(climate$station))
-
-for (i in 1:length(st)) {
-  stadt <- climate %>% 
-    filter(station==st[i], Y>=2013)
-  write.csv(stadt, paste("clidt_", st[i], ".csv", sep=""),row.names = F)
-}
-
-
-
-Chiadt <- climate %>% 
-  filter(station==467480, Y>=2013)
-
-Hendt <- climate %>%
-  filter(station==467590, Y>=2013)
-
-SunMoondt <- climate %>%
-  filter(station==467650, Y>=2013)
-
-write.csv(Chiadt, "Chiadt2013_2023.csv", row.names = F)
-write.csv(Hendt, "Hendt2013_2023.csv", row.names=F)
-write.csv(SunMoondt, "SunMoondt2013_2023.csv", row.names=F)
-
-```
-
-
-
-# Read other data set
+# 2. Read other data set
 ```{r message=FALSE, warning=FALSE}
-Chiadt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Chiayi2013_2023.csv")
-Hendt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Henchun2013_2023.csv")
-SunMoondt <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/SunMoondt2013_2023.csv")
+Chiadt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/Chiayi2013_2023.csv")
+Hendt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/Henchun2013_2023.csv")
+SunMoondt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/SunMoondt2013_2023.csv")
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -125,9 +93,9 @@ head(SunMoondt)
 
 ```
 
-# 4. Combine several dataset.
+# 3. Combine several dataset.
 
-## 4.1. bind_rows()
+## 3.1. bind_rows()
 
 **bind_rows()** can bind all of the data together into the next row by the same column names.
 
@@ -175,10 +143,10 @@ boxplot(TCHdt_year$Precip~TCHdt_year$station)
 boxplot(Precip~station, data=TCHdt_year)
 ```
 
-## 4.2. bind_cols()
+## 3.2. bind_cols()
 Number of rows for each data should be the same.
 ```{r message=FALSE, warning=FALSE}
-stationName <- read.csv("D:/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/StationName.csv", fileEncoding = "big5")
+stationName <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/StationName.csv", fileEncoding = "big5")
 
 head(stationName)
 
@@ -192,7 +160,7 @@ Try this code. Can you combine those data? And why?
 CBind1 <- bind_cols(Taidt, Chiadt, Hendt, SunMoondt, stationName)
 ```
 
-## 4.3. left_join()
+## 3.3. left_join()
 Mutating joins add columns from y to x, matching observations based on the keys.
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 TCHdt_year1 <- TCHdt_year %>%
@@ -237,7 +205,7 @@ boxplot(Precip~stationName, data=TCHdt_year1)
 
 ```
 
-# Do some statistic
+# 4. Do some statistic
 Compare whether there are any difference in precipitation among different station?
 
 ```{r}
@@ -245,7 +213,7 @@ ANO <- aov(Precip~stationName, data=TCHdt_year1)
 summary(ANO)
 ```
 
-# Excercise
+# 5. Excercise
 Combine climate data from multiple climate stations, then use the **boxplot()** function to plot the average temperature, precipitation, maximum temperature, and minimum temperature. Afterward, test whether there are any significant differences in each variable at different elevations.
 
 Please submit write the code and save it into .rmd file. And email one .rmd file to my email: [*jjakon11\@gmail.com*](mailto:jjakon11@gmail.com){.email}
@@ -253,9 +221,9 @@ Please submit write the code and save it into .rmd file. And email one .rmd file
 Chen-Chia Ku
 
 ```{r}
-Excerdt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class7/Excercise.csv")
-stationName <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class8/StationName.csv", fileEncoding = "big5")
-
+Excerdt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/Excercise.csv")
+stationName <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/7_DataTidy_BindMultipleData/Attachment/StationName.csv", fileEncoding = "big5")
+library(tidyr)
 
 Excerdt1 <- Excerdt%>%
   select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
