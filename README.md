@@ -15,10 +15,10 @@ The repository’s name is intended to emphasize that this is my first R class f
 
 The Course schedule are as following: 
 
--   1. [Starting with R](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/1_StartingWithR.Rmd)
--   2. [Basic R: Data types](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/2_BasicR_DataTypes.Rmd)
--   3. [Basic R: matrix](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/3_BasicR_Matrix.Rmd)
--   4. [Basic R: Read Data](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/4_BasicR_ReadData.Rmd)
+-   1. [Starting with R](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/1_StartingWithR)
+-   2. [Basic R: Data types](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/2_BasicR_DataTypes)
+-   3. [Basic R: matrix](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/3_BasicR_Matrix)
+-   4. [Basic R: Read Data](https://github.com/jjakon11/R_MyFirstLesson/tree/main/R/4_BasicR_ReadData)
 -   5. [Tidy Data: Filtering](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/5_DataTidy_Filtering.Rmd)
 -   6. [Tidy Data: Grouping Data](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/6_DataTidy_Grouping.Rmd)
 -   7. [Tidy Data: Combine Multiple Data](https://github.com/jjakon11/R_MyFisrtLesson/blob/main/R/7_DataTidy_BindMultipleData.Rmd)
