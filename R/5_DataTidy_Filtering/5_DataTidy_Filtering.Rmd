@@ -3,6 +3,8 @@ title: "Class5"
 author: "Chen-Chia Ku"
 date: "2023-10-11"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
     keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
@@ -31,24 +33,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Class Instruction:
+# **Class 5:Data Tidy, Filtering**
 
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
-
-# Tidy your data.
-
-In the following section, I will introduce some information about how to tidy your own data by R programming. Here, I will use **dplyr** package to tidy the data.
-
-```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
-library(dplyr) # install.package("dplyr")
-
-```
 
 # 1. Input the Data
 
 ```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
 
-Taidt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class5/Taichung2013_2023.csv")
+Taidt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/5_DataTidy_Filtering/Attachment/Taichung2013_2023.csv")
 
 head(Taidt)
 ```
@@ -103,7 +95,8 @@ R pipes are a way to chain multiple operations together in a concise and express
 
 **This is your data** %\>% **select( )** %\>% **filter( )** %\>% **Result**
 
-![](pipes_image0.png){width="442"}
+ <img src="Attachment/pipes_image0.png" width="500"/>
+
 
 ```{r eval=FALSE, echo=T, tidy=TRUE,tidy.opts=list(width.cutoff=50)}
 Taidt6 <- Taidt %>%
@@ -136,7 +129,7 @@ Please email one rmd file to my email: [*jjakon11\@gmail.com*](mailto:jjakon11@g
 Chen-Chia Ku
 
 ```{r eval=FALSE, include=FALSE}
-Taidt <- read.csv("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class5/Taichung2013_2023.csv")
+Taidt <- read.csv("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/5_DataTidy_Filtering/Attachment/Taichung2013_2023.csv")
 
 HTaidt1 <- Taidt %>%
   select(station, Y, M, D, tavg, tmax, tmin, prec) %>%
