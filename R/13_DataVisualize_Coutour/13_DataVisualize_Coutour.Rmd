@@ -3,10 +3,12 @@ title: "Class13"
 author: "Chen-Chia Ku"
 date: "2023-12-6"
 output:
+  md_document:
+    variant: markdown_github
   pdf_document:
     toc_depth: 5
-    keep_tex: no # 保留 tex 檔，萬一出了問題，可以手動檢查並重新編譯
-    latex_engine: xelatex # latex 引擎設定為 xelatex
+    keep_tex: no 
+    latex_engine: xelatex 
   html_document:
     toc_depth: '3'
     df_print: paged
@@ -19,8 +21,8 @@ output:
     highlight: tango
     toc_depth: 3
 header-includes:
-- \usepackage{fontspec} # 使用 fontspec package
-- \usepackage{xeCJK}    # 使用 xeCJK package
+- \usepackage{fontspec} 
+- \usepackage{xeCJK}    
 - \setCJKmainfont{標楷體}
 - \usepackage{enumitem}
 - \setlistdepth{15}
@@ -33,16 +35,13 @@ header-includes:
 editor_options:
   chunk_output_type: console
 ---
-
 ```{r include=FALSE}
 library(showtext)
 showtext_auto()
 
 ```
 
-# Class Instruction:
-
-[**https://reurl.cc/GKAWrp**](https://reurl.cc/GKAWrp)
+# **Class 13: Data Visualization, Coutour**
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -50,120 +49,25 @@ library(dplyr)
 library(sf)
 library(ggpubr)
 library(ggspatial) #annotation_north_arrow
-
+library(raster)
+library(metR) #install.packages("metR")
 ```
 
-# Last Week...
 
-# 3. Use ggplot to plot the geographic figure
+# 1. Using DEM data
 
-## 3.1. Using shapefile to plot the map
+## 1.1 Plotting whole Taiwan
 
-### 3.1.1. Data input
-
-```{r message=FALSE, warning=FALSE}
-Climatedt <- read.csv(
-  "D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class12/TaiwanClimateStationAll_202003.csv",
-  fileEncoding = "Big5")
-
-taiwan_shp <-sf::st_read(dsn ="D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class12/Taiwan",
-                         layer="gadm36_TWN_2")
-
-#head(Climatedt)
-```
-
-```{r message=FALSE, warning=FALSE}
-Climatedt1 <- Climatedt %>%
-  mutate(Auto=factor(Auto, levels=c(1,0)))
-
-
-#Break the county line.
-
-taiwan2_shp <- st_union(taiwan_shp)
-```
-
-### 3.1.4. the whole code of plotting
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-Tai2 <- ggplot()+
-  #plot something on the graph
-  geom_sf(data=taiwan2_shp)+
-  geom_point(Climatedt1, mapping=aes(x=longitude, y=latitude, color=Auto, size=Auto))+
-  
-  #scale for the color, size or axis
-  scale_color_manual(name="Station Types",breaks=c(1, 0),values=c("#b3c145", "#321f0a"))+
-  scale_size_manual(name="Station Types",breaks=c(1, 0),values=c(0.9,3.0))+
-  coord_sf(xlim = c(118, 122.5), ylim = c(21.5, 26.5), crs=4326)+
-  
-  #put some text or other information
-  annotation_north_arrow(location = "tl", which_north = "true",
-                         #position of the north arrow
-                         pad_x = unit(0.2, "cm"), pad_y = unit(0.6, "cm"), 
-                         #size and style of the north arrow
-                         height = unit(1.0, "cm"), width = unit(1.0, "cm") , 
-                         style = north_arrow_fancy_orienteering(text_col = 'grey10', 
-                                                                line_col = 'grey10',
-                                                                fill = 'grey10'))+
-  #labeling for the axis and tilte
-  xlab("Longitude")+
-  ylab("Latitude")+
-  ggtitle("Taiwan's Climate Station Map")+
-  
-  #theme
-  theme(panel.border = element_rect(colour = "black", fill=NA, linewidth =1.0),
-        panel.background = element_rect(fill = "grey97", colour = "black"))
-
-Tai2
-
-```
-
-# Today's goal
-
-![](D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/JADE2.png){width="40%"}
-
-## 3.2. Using the world map function
-
-### 3.2.1. input the world map data
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-world.map <- map_data("world")
-
-```
-
-### 3.2.2. Plot the world map
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-
-ggplot(world.map, aes(x=long, y=lat, group=group))+
-  geom_polygon(colour="black", fill='grey85')
-```
-
-### 3.2.3. Take out Taiwan
-
-```{r message=FALSE, warning=FALSE, out.width="80%"}
-
-ggplot(world.map, aes(x=long, y=lat, group=group))+
-  geom_polygon(colour="black", fill='grey85')+
-  coord_sf(xlim = c(118, 122.5), ylim = c(21.5, 26.5), crs = 4326)
-
-```
-
-## 3.3 Using DEM data
-
-### 3.3.1 Plotting whole Taiwan
-
-#### Loading the data of DEM data
+### Loading the data of DEM data
 
 You can download the DEM data at : <https://data.gov.tw/dataset/35430>
 
 ```{r  message=FALSE, warning=FALSE}
-library(raster)
-
-taiwan_DEM <- raster("D:/Drive/2_lab/Edu5_Course/Rbasic/Course_Rbasic/Class13/TaiwanMapDEM/tif file/twdtm_asterV2_30m.tif" )
+taiwan_DEM <- raster("E:/Drive/2_lab/Edu5_Course/R_MyFirstLesson/R/13_DataVisualize_Coutour/Attachment/TaiwanMapDEM/tif file/twdtm_asterV2_30m.tif" )
 ```
 
 ```{r  message=FALSE, warning=FALSE}
-land <- aggregate(taiwan_DEM, fact=5)
+land <- aggregate(taiwan_DEM, fact=10)
 Land_Eledt <- rasterToPoints(land)
 Land_Eledt2 <- as.data.frame(Land_Eledt) %>%
   rename(elevation='Layer_1') 
@@ -202,9 +106,6 @@ ggplot()+
 #### Add the elevation on the contour line
 
 ```{r  message=FALSE, warning=FALSE, out.width="80%"}
-
-library(metR) #install.packages("metR")
-
 ggplot()+
   geom_contour(Land_Eledt3, mapping=aes(x=x, y=y, z=elevation), binwidth =250)+
   coord_sf(crs=4326)+
